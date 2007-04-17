@@ -27,7 +27,7 @@
 static PyObject *mime_callback = NULL;
 
 /* ----------------------------------------------- */
-/* Mime type default methods                    */
+/* Mime type default methods                       */
 /* ----------------------------------------------- */
 
 PyObject *
@@ -91,7 +91,7 @@ static struct PyMethodDef Mime_methods[] = {
 		"c.mime.set_mime_callback(callback[, user_data])\n\n"
 		"This method registers a MIME callback function that Libosso calls\n"
 		"when the user wants the application to open file(s) of a MIME type\n"
-		"handled by the application.Use in callback parameter to unset this\n"
+		"handled by the application. Use in callback parameter to unset this\n"
 		"callback. The callback will receive a parameter with a list of URIs and\n"
 		"user_data.\n"},
 	/* Default */
@@ -151,7 +151,6 @@ initmime(void)
 	PyObject *module;
 
 	/* prepare types */
-	MimeType.tp_new = PyType_GenericNew;
 	if (PyType_Ready(&MimeType) < 0) {
 		return;
 	}
