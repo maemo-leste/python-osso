@@ -107,6 +107,21 @@ static struct PyMethodDef Mime_methods[] = {
 		"The mapping from mime type to D-Bus service is done by looking up the\n"
 		"application for the mime type and in the desktop file for that application\n"
 		"the X-Osso-Service field is used to get the D-Bus service.\n"},
+	{"open_file_list", (PyCFunction)Context_mime_open_file_list, METH_VARARGS | METH_KEYWORDS,
+		"c.mime.open_file_list(list)\n\n"
+		"This function opens a list of files in the application that has\n"
+		"registered as the handler for the mime type of the file.\n"
+		"\n"
+		"It receives as its parameter a list of string representations of\n"
+		"the GnomeVFS URI of each file to be opened (UTF-8).\n"
+		"\n"
+		"These will be sent to the application that handles those MIME-types.\n"
+		"If more then one MIME-type is specified, many applications may be launched.\n"
+		"\n"
+		"The mapping from mime type to D-Bus service is done by looking up the\n"
+		"application for the mime type and in the desktop file for that application\n"
+		"the X-Osso-Service field is used to get the D-Bus service.\n"
+		},
 	/* Default */
 	{"close", (PyCFunction)Mime_close, METH_NOARGS, "Close Mime context."},
 	{0, 0, 0, 0}
@@ -295,6 +310,69 @@ Context_mime_open_file(Context *self, PyObject *args, PyObject *kwds)
 	}
 
 	Py_RETURN_NONE;
+}
+
+PyObject *
+Context_mime_open_file_list(Context *self, PyObject *args, PyObject *kwds)
+{
+	PyObject *uri_list;
+	gint result;
+	DBusConnection *dbus_conn;
+	DBusError error;
+	Py_ssize_t list_size;
+	Py_ssize_t i;
+	GSList *uri_gslist = NULL;
+	gboolean ok = TRUE;
+	PyObject *string_obj;
+	char *uri;
+
+	static char *kwlist[] = { "list", 0 };
+
+	if (!_check_context(self->context)) return 0;
+
+	if (!PyArg_ParseTupleAndKeywords(args, kwds,
+				"O!:Mime.open_file_list", kwlist, PyList_Type, &uri_list)) {
+		ok = FALSE;
+		goto CLEAN_UP;
+	}
+
+	// Create a GLib list from the Python one.
+	list_size = PyList_GET_SIZE (uri_list);
+	for (i = 0; i < list_size; i++) {
+		string_obj = PyList_GetItem (uri_list, i);
+		uri = PyString_AsString (string_obj);
+		uri_gslist = g_slist_append (uri_gslist, uri);
+	}
+
+	// Get a D-Bus connection
+	dbus_error_init (&error);
+	dbus_conn = dbus_bus_get (DBUS_BUS_SESSION, &error);
+	if (dbus_conn == NULL || dbus_error_is_set (&error)) {
+		PyErr_SetString (PyExc_RuntimeError, error.message);
+		dbus_error_free (&error);
+		ok = FALSE;
+		goto CLEAN_UP;
+	}
+
+	// And finally call the C funtion we're wrapping.
+	result = osso_mime_open_file_list (dbus_conn, uri_gslist);
+
+	if (result != 1) {
+		PyErr_SetString (PyExc_RuntimeError,
+			"Failed when trying to open the list of URIs.");
+		ok = FALSE;
+		goto CLEAN_UP;
+	}
+
+	CLEAN_UP:
+
+	if (uri_gslist != NULL)
+		g_slist_free (uri_gslist);
+
+	if (ok == TRUE)
+		Py_RETURN_NONE;
+	else
+		return NULL;
 }
 
 /* vim:ts=4:noet:sw=4:sws=4:si:ai:showmatch:foldmethod=indent
