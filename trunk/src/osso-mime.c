@@ -91,15 +91,15 @@ Mime_dealloc(Context *self)
 static struct PyMethodDef Mime_methods[] = {
 	/* MIME */
 	{"set_mime_callback", (PyCFunction)Context_set_mime_callback, METH_VARARGS | METH_KEYWORDS,
-		"c.mime.set_mime_callback(callback[, user_data])\n\n"
+		"osso.Mime.set_mime_callback(callback[, user_data])\n\n"
 		"This method registers a MIME callback function that Libosso calls\n"
 		"when the user wants the application to open file(s) of a MIME type\n"
 		"handled by the application. Use in callback parameter to unset this\n"
 		"callback. The callback will receive a parameter with a list of URIs and\n"
 		"user_data.\n"},
 	{"open_file", (PyCFunction)Context_mime_open_file, METH_VARARGS | METH_KEYWORDS,
-		"c.mime.open_file(uri)\n\n"
-		"This function opens a file using the application that is\n"
+		"osso.Mime.open_file(uri)\n\n"
+		"This method opens a file using the application that is\n"
 		"registered as the handler for the file's mime type.\n"
 		"The 'uri' parameter must be a string representation of the\n"
 		"GnomeVFS URI of the file to be opened (UTF-8).\n"
@@ -108,8 +108,8 @@ static struct PyMethodDef Mime_methods[] = {
 		"application for the mime type and in the desktop file for that application\n"
 		"the X-Osso-Service field is used to get the D-Bus service.\n"},
 	{"open_file_list", (PyCFunction)Context_mime_open_file_list, METH_VARARGS | METH_KEYWORDS,
-		"c.mime.open_file_list(list)\n\n"
-		"This function opens a list of files in the application that has\n"
+		"osso.Mime.open_file_list(list)\n\n"
+		"This method opens a list of files in the application that has\n"
 		"registered as the handler for the mime type of the file.\n"
 		"\n"
 		"It receives as its parameter a list of string representations of\n"
