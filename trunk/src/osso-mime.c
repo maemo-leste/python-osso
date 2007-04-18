@@ -122,6 +122,14 @@ static struct PyMethodDef Mime_methods[] = {
 		"application for the mime type and in the desktop file for that application\n"
 		"the X-Osso-Service field is used to get the D-Bus service.\n"
 		},
+	{"open_file_with_mime_type", (PyCFunction)Context_mime_open_file_with_mime_type, METH_VARARGS | METH_KEYWORDS,
+		"osso.Mime.open_file_with_mime_type(uri, mime_type)\n\n"
+		"This method opens a file using the application that is\n"
+		"registered as the handler for the given mime type.\n"
+		"\n"
+		"This operates similarly to osso.Mime.open_file() with the exception\n"
+		"that a file does not need to be given, and the mime type supplied\n"
+		"is used without the need for checking the mime-type of the file itself.\n"},
 	/* Default */
 	{"close", (PyCFunction)Mime_close, METH_NOARGS, "Close Mime context."},
 	{0, 0, 0, 0}
@@ -373,6 +381,45 @@ Context_mime_open_file_list(Context *self, PyObject *args, PyObject *kwds)
 		Py_RETURN_NONE;
 	else
 		return NULL;
+}
+
+PyObject *
+Context_mime_open_file_with_mime_type (Context *self, PyObject *args, PyObject *kwds)
+{
+	const char *file_uri;
+	const char *mime_type;
+	gint result;
+	DBusConnection *dbus_conn;
+	DBusError error;
+
+	static char *kwlist[] = { "uri", "mime_type", 0 };
+
+	if (!_check_context(self->context)) return 0;
+
+	if (!PyArg_ParseTupleAndKeywords(args, kwds,
+				"ss:Mime.open_file_with_mime_type", kwlist, &file_uri, &mime_type)) {
+		return NULL;
+	}
+
+	// Get a D-Bus connection
+	dbus_error_init (&error);
+	dbus_conn = dbus_bus_get (DBUS_BUS_SESSION, &error);
+	if (dbus_conn == NULL || dbus_error_is_set (&error)) {
+		PyErr_SetString (PyExc_RuntimeError, error.message);
+		dbus_error_free (&error);
+		return NULL;
+	}
+
+	// And finally call the C funtion we're wrapping.
+	result = osso_mime_open_file_with_mime_type (dbus_conn, file_uri, mime_type);
+
+	if (result != 1) {
+		PyErr_SetString (PyExc_RuntimeError,
+			"Failed when trying to open the specified URI.");
+		return NULL;
+	}
+
+	Py_RETURN_NONE;
 }
 
 /* vim:ts=4:noet:sw=4:sws=4:si:ai:showmatch:foldmethod=indent
