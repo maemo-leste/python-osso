@@ -24,6 +24,9 @@
 
 #include "osso.h"
 
+#include <osso-mime.h>
+#include <dbus/dbus.h>
+
 static PyObject *mime_callback = NULL;
 
 /* ----------------------------------------------- */
@@ -94,6 +97,16 @@ static struct PyMethodDef Mime_methods[] = {
 		"handled by the application. Use in callback parameter to unset this\n"
 		"callback. The callback will receive a parameter with a list of URIs and\n"
 		"user_data.\n"},
+	{"open_file", (PyCFunction)Context_mime_open_file, METH_VARARGS | METH_KEYWORDS,
+		"c.mime.open_file(uri)\n\n"
+		"This function opens a file using the application that is\n"
+		"registered as the handler for the file's mime type.\n"
+		"The 'uri' parameter must be a string representation of the\n"
+		"GnomeVFS URI of the file to be opened (UTF-8).\n"
+		"\n"
+		"The mapping from mime type to D-Bus service is done by looking up the\n"
+		"application for the mime type and in the desktop file for that application\n"
+		"the X-Osso-Service field is used to get the D-Bus service.\n"},
 	/* Default */
 	{"close", (PyCFunction)Mime_close, METH_NOARGS, "Close Mime context."},
 	{0, 0, 0, 0}
@@ -239,6 +252,45 @@ Context_set_mime_callback(Context *self, PyObject *args, PyObject *kwds)
 
 	if (ret != OSSO_OK) {
 		_set_exception(ret, NULL);
+		return NULL;
+	}
+
+	Py_RETURN_NONE;
+}
+
+
+PyObject *
+Context_mime_open_file(Context *self, PyObject *args, PyObject *kwds)
+{
+	const char *file_uri;
+	gint result;
+	DBusConnection *dbus_conn;
+	DBusError error;
+
+	static char *kwlist[] = { "uri", 0 };
+
+	if (!_check_context(self->context)) return 0;
+
+	if (!PyArg_ParseTupleAndKeywords(args, kwds,
+				"s:Mime.open_file", kwlist, &file_uri)) {
+		return NULL;
+	}
+
+	// Get a D-Bus connection
+	dbus_error_init (&error);
+	dbus_conn = dbus_bus_get (DBUS_BUS_SESSION, &error);
+	if (dbus_conn == NULL || dbus_error_is_set (&error)) {
+		PyErr_SetString (PyExc_RuntimeError, error.message);
+		dbus_error_free (&error);
+		return NULL;
+	}
+
+	// And finally call the C funtion we're wrapping.
+	result = osso_mime_open_file (dbus_conn, file_uri);
+
+	if (result != 1) {
+		PyErr_SetString (PyExc_RuntimeError,
+			"Failed when trying to open the specified URI.");
 		return NULL;
 	}
 

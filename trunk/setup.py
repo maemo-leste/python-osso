@@ -27,6 +27,10 @@ common_libraries = ['osso',
                     'gtk-x11-2.0',
                     'pango-1.0']
 
+mime_include_dirs = ['/usr/include/gnome-vfs-2.0']
+
+mime_libraries = ['ossomime']
+
 #Modules to be built
 osso_modules = [ Extension('application', sources = ['src/osso-application.c', 'src/osso-helper.c'],
                             libraries = common_libraries,
@@ -45,8 +49,8 @@ osso_modules = [ Extension('application', sources = ['src/osso-application.c', '
                             include_dirs = common_include_dirs,
                             extra_compile_args = common_compile_args),
                  Extension('mime', sources = ['src/osso-mime.c', 'src/osso-helper.c'],
-                            libraries = common_libraries,
-                            include_dirs = common_include_dirs,
+                            libraries = common_libraries + mime_libraries,
+                            include_dirs = common_include_dirs + mime_include_dirs,
                             extra_compile_args = common_compile_args),
                  Extension('misc', sources = ['src/osso-misc.c', 'src/osso-helper.c'],
                             libraries = common_libraries,
