@@ -2,7 +2,7 @@
  * osso-state.c
  * Python bindings for libosso components.
  *
- * Copyright (C) 2005-2006 Nokia Corporation.
+ * Copyright (C) 2005-2006 INdT - Instituto Nokia de Tecnologia
  *
  * Contact: Osvaldo Santana Neto <osvaldo.santana@indt.org.br>
  *

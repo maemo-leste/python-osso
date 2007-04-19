@@ -2,9 +2,11 @@
  * osso-mime.c
  * Python bindings for libosso components.
  *
- * Copyright (C) 2005-2006 Nokia Corporation.
+ * Copyright (C) 2005-2007 INdT - Instituto Nokia de Tecnologia
  *
- * Contact: Osvaldo Santana Neto <osvaldo.santana@indt.org.br>
+ * Authors:
+ * Osvaldo Santana Neto <osvaldo.santana@indt.org.br>
+ * Daniel d'Andrada T. de Carvalho <daniel.carvalho@indt.org.br>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
