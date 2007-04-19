@@ -155,6 +155,18 @@ static struct PyMethodDef Mime_methods[] = {
 		"It receives the category (string) as its parameter and returns either the\n"
 		"corresponding list of mime-types (list of strings) or None, if none were\n"
 		"found or it's not a valid category.\n"},
+	{"get_application_mime_types", (PyCFunction)Context_mime_get_application_mime_types, METH_VARARGS | METH_KEYWORDS,
+		"osso.Mime.get_application_mime_types(app_id)\n\n"
+		"Returns a list of mime types supported by the application corresponding to\n"
+		"the specified appliction id.\n"
+		"\n"
+		"The list of mime types is specifed in the desktop file for the application\n"
+		"with the MimeType field.\n"
+		"\n"
+		"app_id is the application id, as returned by GnomeVFS.\n"
+		"\n"
+		"It returns a list of mime types, represented as strings, or None if none were\n"
+		"found.\n"},
 	/* Default */
 	{"close", (PyCFunction)Mime_close, METH_NOARGS, "Close Mime context."},
 	{0, 0, 0, 0}
@@ -233,7 +245,7 @@ initmime(void)
 
 	
 static void
-_wrap_mime_callback_handler(void *data, int argc, char **argv)
+_wrap_mime_callback_handler (void *data, int argc, char **argv)
 {
 	int i;
 	PyObject *py_args = NULL;
@@ -263,7 +275,7 @@ _wrap_mime_callback_handler(void *data, int argc, char **argv)
 
 
 PyObject *
-Context_set_mime_callback(Context *self, PyObject *args, PyObject *kwds)
+Context_set_mime_callback (Context *self, PyObject *args, PyObject *kwds)
 {
 	PyObject *py_func = NULL;
 	PyObject *py_data = NULL;
@@ -309,7 +321,7 @@ Context_set_mime_callback(Context *self, PyObject *args, PyObject *kwds)
 
 
 PyObject *
-Context_mime_open_file(Context *self, PyObject *args, PyObject *kwds)
+Context_mime_open_file (Context *self, PyObject *args, PyObject *kwds)
 {
 	const char *file_uri;
 	gint result;
@@ -348,7 +360,7 @@ Context_mime_open_file(Context *self, PyObject *args, PyObject *kwds)
 
 
 PyObject *
-Context_mime_open_file_list(Context *self, PyObject *args, PyObject *kwds)
+Context_mime_open_file_list (Context *self, PyObject *args, PyObject *kwds)
 {
 	PyObject *uri_list;
 	gint result;
@@ -452,7 +464,7 @@ Context_mime_open_file_with_mime_type (Context *self, PyObject *args, PyObject *
 
 
 PyObject *
-Context_mime_get_category_for_mime_type(Context *self, PyObject *args, PyObject *kwds)
+Context_mime_get_category_for_mime_type (Context *self, PyObject *args, PyObject *kwds)
 {
 	const char *mime_type;
 	OssoMimeCategory category;
@@ -480,7 +492,7 @@ Context_mime_get_category_for_mime_type(Context *self, PyObject *args, PyObject 
 
 
 PyObject *
-Context_mime_get_mime_types_for_category(Context *self, PyObject *args, PyObject *kwds)
+Context_mime_get_mime_types_for_category (Context *self, PyObject *args, PyObject *kwds)
 {
 	const char *category;
 	GList *mime_list = NULL;
@@ -524,6 +536,53 @@ Context_mime_get_mime_types_for_category(Context *self, PyObject *args, PyObject
 
 	// Clean up
 	osso_mime_types_list_free (mime_list);
+
+	return ret_val;
+}
+
+
+PyObject *
+Context_mime_get_application_mime_types (Context *self, PyObject *args, PyObject *kwds)
+{
+	const char* app_id;
+	GList *mime_list;
+	PyObject *ret_val = NULL;
+	PyObject *py_string;
+	GList *curr_item;
+	const char *mime_type;
+	Py_ssize_t i;
+	static char *kwlist[] = { "app_id", 0 };
+
+	if (!_check_context(self->context)) return 0;
+
+	if (!PyArg_ParseTupleAndKeywords(args, kwds,
+				"s:Mime.get_application_mime_types", kwlist, &app_id)) {
+		return NULL;
+	}
+
+	// Call the C funtion we're wrapping.
+	mime_list = osso_mime_application_get_mime_types (app_id);
+
+	if (mime_list == NULL)
+		Py_RETURN_NONE;
+
+	// Convert from GList to Python list
+	ret_val = PyList_New (g_list_length (mime_list));
+
+	curr_item = mime_list;
+	i = 0;
+	while (curr_item != NULL) {
+		mime_type = (char*) curr_item->data;
+
+		py_string = PyString_FromString (mime_type);
+		PyList_SET_ITEM (ret_val, i, py_string);
+
+		curr_item = curr_item->next;
+		i++;
+	}
+
+	// Clean up
+	osso_mime_application_mime_types_list_free (mime_list);
 
 	return ret_val;
 }
