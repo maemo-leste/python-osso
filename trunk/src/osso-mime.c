@@ -136,10 +136,30 @@ static struct PyMethodDef Mime_methods[] = {
 		"osso.Mime.get_category_for_mime_type(mime_type)\n\n"
 		"Return the category the specified mime type is in or None. See\n"
 		"osso.Mime.get_mime_types_for_category() for more information.\n"},
+	{"get_mime_types_for_category", (PyCFunction)Context_mime_get_mime_types_for_category, METH_VARARGS | METH_KEYWORDS,
+		"osso.Mime.get_mime_types_for_category(category)\n\n"
+		"Returns a list of mime types that are in the specified category.\n"
+		"\n"
+		"The mapping between category and mime type is handled through the shared mime\n"
+		"info. Add the tag <osso:category name=\"foo\"/> to a mime type to specify that\n"
+		"the mime type is in the category \"foo\". Valid category names are:\n"
+		"\n"
+		"\"audio\", \"bookmarks\", \"contacts\", \"documents\", \"emails\", \"images\" and \"video\"\n"
+		"\n"
+		"An example:\n"
+		"\n"
+		"<mime-type type=\"text/plain\">\n"
+		"    <osso:category name=\"documents\"/>\n"
+		"</mime-type>\n"
+		"\n"
+		"It receives the category (string) as its parameter and returns either the\n"
+		"corresponding list of mime-types (list of strings) or None, if none were\n"
+		"found or it's not a valid category.\n"},
 	/* Default */
 	{"close", (PyCFunction)Mime_close, METH_NOARGS, "Close Mime context."},
 	{0, 0, 0, 0}
 };
+
 
 static PyTypeObject MimeType = {
 	PyObject_HEAD_INIT(NULL)
@@ -326,6 +346,7 @@ Context_mime_open_file(Context *self, PyObject *args, PyObject *kwds)
 	Py_RETURN_NONE;
 }
 
+
 PyObject *
 Context_mime_open_file_list(Context *self, PyObject *args, PyObject *kwds)
 {
@@ -389,6 +410,7 @@ Context_mime_open_file_list(Context *self, PyObject *args, PyObject *kwds)
 		return NULL;
 }
 
+
 PyObject *
 Context_mime_open_file_with_mime_type (Context *self, PyObject *args, PyObject *kwds)
 {
@@ -428,6 +450,7 @@ Context_mime_open_file_with_mime_type (Context *self, PyObject *args, PyObject *
 	Py_RETURN_NONE;
 }
 
+
 PyObject *
 Context_mime_get_category_for_mime_type(Context *self, PyObject *args, PyObject *kwds)
 {
@@ -453,6 +476,56 @@ Context_mime_get_category_for_mime_type(Context *self, PyObject *args, PyObject 
 		Py_RETURN_NONE;
 	else
 		return PyString_FromString (category_str);
+}
+
+
+PyObject *
+Context_mime_get_mime_types_for_category(Context *self, PyObject *args, PyObject *kwds)
+{
+	const char *category;
+	GList *mime_list = NULL;
+	static char *kwlist[] = { "category", 0 };
+	OssoMimeCategory cat_enum;
+	PyObject *ret_val = NULL;
+	PyObject *py_string;
+	GList *curr_item;
+	const char *mime_type;
+	Py_ssize_t i;
+
+	if (!_check_context(self->context)) return 0;
+
+	if (!PyArg_ParseTupleAndKeywords(args, kwds,
+				"s:Mime.get_mime_types_for_category", kwlist, &category)) {
+		return NULL;
+	}
+
+	cat_enum = osso_mime_get_category_from_name (category);
+
+	// Call the C funtion we're wrapping.
+	mime_list = osso_mime_get_mime_types_for_category (cat_enum);
+
+	if (mime_list == NULL)
+		Py_RETURN_NONE;
+
+	// Convert from GList to Python list
+	ret_val = PyList_New (g_list_length (mime_list));
+
+	curr_item = mime_list;
+	i = 0;
+	while (curr_item != NULL) {
+		mime_type = (char*) curr_item->data;
+
+		py_string = PyString_FromString (mime_type);
+		PyList_SET_ITEM (ret_val, i, py_string);
+
+		curr_item = curr_item->next;
+		i++;
+	}
+
+	// Clean up
+	osso_mime_types_list_free (mime_list);
+
+	return ret_val;
 }
 
 /* vim:ts=4:noet:sw=4:sws=4:si:ai:showmatch:foldmethod=indent
