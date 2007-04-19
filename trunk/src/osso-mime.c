@@ -130,6 +130,10 @@ static struct PyMethodDef Mime_methods[] = {
 		"This operates similarly to osso.Mime.open_file() with the exception\n"
 		"that a file does not need to be given, and the mime type supplied\n"
 		"is used without the need for checking the mime-type of the file itself.\n"},
+	{"get_category_for_mime_type", (PyCFunction)Context_mime_get_category_for_mime_type, METH_VARARGS | METH_KEYWORDS,
+		"osso.Mime.get_category_for_mime_type(mime_type)\n\n"
+		"Return the category the specified mime type is in or None. See\n"
+		"osso.Mime.get_mime_types_for_category() for more information.\n"},
 	/* Default */
 	{"close", (PyCFunction)Mime_close, METH_NOARGS, "Close Mime context."},
 	{0, 0, 0, 0}
@@ -420,6 +424,33 @@ Context_mime_open_file_with_mime_type (Context *self, PyObject *args, PyObject *
 	}
 
 	Py_RETURN_NONE;
+}
+
+PyObject *
+Context_mime_get_category_for_mime_type(Context *self, PyObject *args, PyObject *kwds)
+{
+	const char *mime_type;
+	OssoMimeCategory category;
+	const gchar *category_str;
+
+	static char *kwlist[] = { "mime_type", 0 };
+
+	if (!_check_context(self->context)) return 0;
+
+	if (!PyArg_ParseTupleAndKeywords(args, kwds,
+				"s:Mime.get_category_for_mime_type", kwlist, &mime_type)) {
+		return NULL;
+	}
+
+	// Call the C funtion we're wrapping.
+	category = osso_mime_get_category_for_mime_type (mime_type);
+
+	category_str = osso_mime_get_category_name (category);
+
+	if (category_str == NULL)
+		Py_RETURN_NONE;
+	else
+		return PyString_FromString (category_str);
 }
 
 /* vim:ts=4:noet:sw=4:sws=4:si:ai:showmatch:foldmethod=indent

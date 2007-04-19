@@ -118,6 +118,7 @@ PyObject *Context_set_mime_callback(Context *self, PyObject *args, PyObject *kwd
 PyObject *Context_mime_open_file(Context *self, PyObject *args, PyObject *kwds);
 PyObject *Context_mime_open_file_list(Context *self, PyObject *args, PyObject *kwds);
 PyObject *Context_mime_open_file_with_mime_type(Context *self, PyObject *args, PyObject *kwds);
+PyObject *Context_mime_get_category_for_mime_type(Context *self, PyObject *args, PyObject *kwds);
 
 /* Others */
 /*
