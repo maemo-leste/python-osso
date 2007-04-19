@@ -167,6 +167,17 @@ static struct PyMethodDef Mime_methods[] = {
 		"\n"
 		"It returns a list of mime types, represented as strings, or None if none were\n"
 		"found.\n"},
+	{"get_icon_names", (PyCFunction)Context_mime_get_icon_names, METH_VARARGS | METH_KEYWORDS,
+		"osso.Mime.get_icon_names(mime_type)\n\n"
+		"Returns a list of icon names for the specified mime type. The icon names\n"
+		"are GtkIconTheme names. A number of names are returned, ordered by how\n"
+		"specific they are. For example, if the mime type \"image/png\" is passed,\n"
+		"the first icon name might correspond to a png file icon, the second to\n"
+		"an image file icon, and the third to a regular file icon.\n"
+		"\n"
+		"In order to decide which icon to use, the existance of it in the icon theme\n"
+		"should be checked with gtk_icon_theme_has_icon(). If the first icon is not\n"
+		"available, try the next etc.\n"},
 	/* Default */
 	{"close", (PyCFunction)Mime_close, METH_NOARGS, "Close Mime context."},
 	{0, 0, 0, 0}
@@ -583,6 +594,43 @@ Context_mime_get_application_mime_types (Context *self, PyObject *args, PyObject
 
 	// Clean up
 	osso_mime_application_mime_types_list_free (mime_list);
+
+	return ret_val;
+}
+
+
+PyObject *
+Context_mime_get_icon_names(Context *self, PyObject *args, PyObject *kwds)
+{
+	const char *mime_type;
+	gchar **icon_names;
+	int i;
+	PyObject *ret_val = NULL;
+	PyObject *py_string;
+	static char *kwlist[] = { "mime_type", 0 };
+
+	if (!_check_context(self->context)) return 0;
+
+	if (!PyArg_ParseTupleAndKeywords(args, kwds,
+				"s:Mime.get_icon_names", kwlist, &mime_type)) {
+		return NULL;
+	}
+
+	// Call the C funtion we're wrapping.
+	icon_names = osso_mime_get_icon_names (mime_type, NULL);
+	if (icon_names == NULL)
+		Py_RETURN_NONE;
+
+	// Convert icon_names to a Python list
+	ret_val = PyList_New (0);
+
+	for (i = 0; icon_names[i] != NULL; i++) {
+		py_string = PyString_FromString (icon_names[i]);
+		PyList_Append (ret_val, py_string);
+	}
+
+	// Clean up
+	g_strfreev (icon_names);
 
 	return ret_val;
 }
