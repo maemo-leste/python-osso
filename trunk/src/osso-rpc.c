@@ -515,7 +515,7 @@ _wrap_rpc_callback_handler(const char *interface, const char *method, GArray *ar
 
 	if (py_ret == NULL) {
 		retval->type = DBUS_TYPE_STRING;
-		retval->value.s = "There is some exceptions in callback.";
+		retval->value.s = "There are some exceptions in callback.";
 		PyGILState_Release(state);
 		return OSSO_ERROR;
 	}
