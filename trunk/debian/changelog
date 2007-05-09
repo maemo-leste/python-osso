@@ -1,3 +1,9 @@
+python-osso (0.2-1osso3) unstable; urgency=low
+
+  * Added support to osso-mime 
+
+ -- Luciano Miguel Wolf <luciano.wolf@indt.org.br>  Wed,  9 May 2007 09:24:34 -0300
+
 python-osso (0.2-1osso2) unstable; urgency=low
 
   * Osso rpc functions revised (closes #388, #389):
