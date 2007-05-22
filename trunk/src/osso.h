@@ -29,6 +29,7 @@
 #include <marshal.h>
 #include <time.h>
 #include <libosso.h>
+#include <osso-helplib.h>
 #include <pygtk/pygtk.h>
 
 #define DBUS_API_SUBJECT_TO_CHANGE
@@ -130,6 +131,10 @@ PyObject *Context_tasknav_mail_del(Context *self, PyObject *args, PyObject *kwds
 PyObject *Context_tasknav_mail_set_outbox_count(Context *self, PyObject *args, PyObject *kwds);
 */
 PyObject *Context_set_exit_callback(Context *self, PyObject *args, PyObject *kwds);
+
+/* HelpLib */
+PyObject *Context_help_show(Context *self, PyObject *args, PyObject *kwds);
+PyObject *Context_help_dialog_help_enable(Context *self, PyObject *args, PyObject *kwds);
 
 #endif
 
