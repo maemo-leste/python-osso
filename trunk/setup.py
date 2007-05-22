@@ -21,6 +21,7 @@ common_include_dirs = ['/usr/include',
                        '/usr/include/pango-1.0']
 
 common_libraries = ['osso',
+                    'ossohelp',
                     'atk-1.0',
                     'dbus-1',
                     'glib-2.0',
@@ -45,6 +46,10 @@ osso_modules = [ Extension('application', sources = ['src/osso-application.c', '
                             include_dirs = common_include_dirs,
                             extra_compile_args = common_compile_args),
                  Extension('device_state', sources = ['src/osso-device-state.c', 'src/osso-helper.c'],
+                            libraries = common_libraries,
+                            include_dirs = common_include_dirs,
+                            extra_compile_args = common_compile_args),
+                 Extension('help', sources = ['src/osso-helplib.c', 'src/osso-helper.c'],
                             libraries = common_libraries,
                             include_dirs = common_include_dirs,
                             extra_compile_args = common_compile_args),
