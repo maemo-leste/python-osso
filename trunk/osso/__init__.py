@@ -33,3 +33,4 @@ from state_saving import StateSaving
 from statusbar import Statusbar
 from system_note import SystemNote
 from time_notification import TimeNotification
+import ic

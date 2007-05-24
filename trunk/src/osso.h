@@ -62,6 +62,12 @@ typedef struct {
 	osso_context_t *context;
 } Context;
 
+/* IAP Events */
+typedef struct {
+	PyObject_HEAD
+	struct iap_event_t *event;
+} IapEvent;
+
 /* Context type default methods */
 char _check_context(osso_context_t *context);
 void _set_exception(osso_return_t err, osso_rpc_t *retval);
@@ -123,6 +129,12 @@ PyObject *Context_mime_get_category_for_mime_type(Context *self, PyObject *args,
 PyObject *Context_mime_get_mime_types_for_category(Context *self, PyObject *args, PyObject *kwds);
 PyObject *Context_mime_get_application_mime_types(Context *self, PyObject *args, PyObject *kwds);
 PyObject *Context_mime_get_icon_names(Context *self, PyObject *args, PyObject *kwds);
+
+PyObject *IapIc_set_callback (PyObject *self, PyObject *args);
+PyObject *IapIc_connect(PyObject *self, PyObject *args, PyObject *kwargs);
+PyObject *IapIc_socket(PyObject *self, PyObject *args, PyObject *kwargs);
+PyObject *IapIc_close(PyObject *self, PyObject *args, PyObject *kwargs);
+
 
 /* Others */
 /*
