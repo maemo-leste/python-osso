@@ -132,6 +132,9 @@ PyObject *Context_mime_get_icon_names(Context *self, PyObject *args, PyObject *k
 
 PyObject *IapIc_set_callback (PyObject *self, PyObject *args);
 PyObject *IapIc_connect(PyObject *self, PyObject *args, PyObject *kwargs);
+PyObject *IapIc_disconnect(PyObject *self, PyObject *args, PyObject *kwargs);
+PyObject *IapIc_get_statistics(PyObject *self, PyObject *args, PyObject *kwargs);
+PyObject *IapIc_get_configured_iaps(PyObject *self);
 PyObject *IapIc_socket(PyObject *self, PyObject *args, PyObject *kwargs);
 PyObject *IapIc_close(PyObject *self, PyObject *args, PyObject *kwargs);
 
