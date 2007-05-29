@@ -26,6 +26,9 @@
 #include "osso.h"
 
 #include <osso-ic.h>
+#include <dbus/dbus.h>
+#include <dbus/dbus-glib.h>
+#include <dbus/dbus-glib-lowlevel.h>
 
 static PyObject *ic_callback = NULL;
 
@@ -70,6 +73,7 @@ IapEvent_dealloc(IapEvent *self)
 	if (self->event == NULL)
 		return;
 
+	/* TODO Memory leak? */
 	self->event = NULL;
 	return;
 }
@@ -116,6 +120,8 @@ IapEvent_get_extra(IapEvent *self, void *closure)
 	int type = 0;
 
 	if (closure == NULL || self == NULL || self->event == NULL){
+		g_debug("Got a null arg (%p)(%p)(%p)", closure, self, self->event);
+
 		Py_INCREF(Py_None);
 		return Py_None;
 	}
@@ -127,49 +133,49 @@ IapEvent_get_extra(IapEvent *self, void *closure)
 		if (type == OSSO_IAP_ERROR)
 			ret = self->event->u.error_code;
 		else
-			ret = -1;
+			Py_RETURN_NONE;
 
 	} else if (!strncmp(closure, "time", 4)) {
 
 		if (type == OSSO_IAP_STATISTICS)
 			ret = self->event->u.statistics.time_active;
 		else
-			ret = -1;
+			Py_RETURN_NONE;
 
 	} else if (!strncmp(closure, "signal", 5)) {
 
 		if (type == OSSO_IAP_STATISTICS)
 			ret = self->event->u.statistics.signal_strength;
 		else
-			ret = -1;
+			Py_RETURN_NONE;
 
 	} else if (!strncmp(closure, "rx_packets", 10)) {
 
 		if (type == OSSO_IAP_STATISTICS)
 			ret = self->event->u.statistics.rx_packets;
 		else
-			ret = -1;
+			Py_RETURN_NONE;
 
 	} else if (!strncmp(closure, "tx_packets", 10)) {
 
 		if (type == OSSO_IAP_STATISTICS)
 			ret = self->event->u.statistics.tx_packets;
 		else
-			ret = -1;
+			Py_RETURN_NONE;
 
 	} else if (!strncmp(closure, "rx_bytes", 10)) {
 
 		if (type == OSSO_IAP_STATISTICS)
 			ret = self->event->u.statistics.rx_bytes;
 		else
-			ret = -1;
+			Py_RETURN_NONE;
 
-	} else if (!strncmp(closure, "tx_types", 10)) {
+	} else if (!strncmp(closure, "tx_bytes", 10)) {
 
 		if (type == OSSO_IAP_STATISTICS)
 			ret = self->event->u.statistics.tx_bytes;
 		else
-			ret = -1;
+			Py_RETURN_NONE;
 
 	} else {
 		Py_INCREF(Py_None);
@@ -181,23 +187,23 @@ IapEvent_get_extra(IapEvent *self, void *closure)
 
 static struct PyGetSetDef IapEvent_getset[] = {
 	{"type",
-		(getter)IapEvent_get_type, 0, 0},
+		(getter)IapEvent_get_type, 0, NULL, 0},
 	{"iap",
-		(getter)IapEvent_get_iap_name, 0, 0},
+		(getter)IapEvent_get_iap_name, 0, NULL, 0},
 	{"error_code",
-		(getter)IapEvent_get_extra, 0, "code"},
+		(getter)IapEvent_get_extra, 0, NULL, "code"},
 	{"time_active",
-		(getter)IapEvent_get_extra, 0, "time"},
+		(getter)IapEvent_get_extra, 0, NULL, "time"},
 	{"signal_strength",
-		(getter)IapEvent_get_extra, 0, "signal"},
+		(getter)IapEvent_get_extra, 0, NULL, "signal"},
 	{"rx_packets",
-		(getter)IapEvent_get_extra, 0, "rx_packets"},
+		(getter)IapEvent_get_extra, 0, NULL, "rx_packets"},
 	{"tx_packets",
-		(getter)IapEvent_get_extra, 0, "tx_packets"},
+		(getter)IapEvent_get_extra, 0, NULL, "tx_packets"},
 	{"rx_bytes",
-		(getter)IapEvent_get_extra, 0, "rx_bytes"},
+		(getter)IapEvent_get_extra, 0, NULL, "rx_bytes"},
 	{"tx_bytes",
-		(getter)IapEvent_get_extra, 0, "tx_bytes"},
+		(getter)IapEvent_get_extra, 0, NULL, "tx_bytes"},
 
 	{0, 0, 0, 0}
 };
@@ -205,7 +211,7 @@ static struct PyGetSetDef IapEvent_getset[] = {
 static PyTypeObject IapEventType = {
 	PyObject_HEAD_INIT(NULL)
 	0,																/* ob_size */
-	"osso.Mime",													/* tp_name */
+	"osso.IapEvent",												/* tp_name */
 	sizeof(IapEvent),												/* tp_basicsize */
 	0,																/* tp_itemsize */
 	(destructor)IapEvent_dealloc,									/* tp_dealloc */
@@ -224,7 +230,7 @@ static PyTypeObject IapEventType = {
 	0,																/* tp_setattro */
 	0,																/* tp_as_buffer */
 	Py_TPFLAGS_DEFAULT|Py_TPFLAGS_CHECKTYPES|Py_TPFLAGS_BASETYPE,	/* tp_flags */
-	"OSSO Mime class",												/* tp_doc */
+	"OSSO Iap Event class",											/* tp_doc */
 	0,																/* tp_traverse */
 	0,																/* tp_clear */
 	0,																/* tp_richcompare */
@@ -280,13 +286,43 @@ static struct PyMethodDef osso_ic_methods[] = {
 };
 
 void
-add_constants(void)
+add_constants(PyObject *module)
 {
 	/* PyModule_AddStringConstanti(PyObject *module,
 	 * 							   const char *name,
 	 * 							   const char *value); */
+
+	PyModule_AddIntConstant(module, "REQUESTED_CONNECT",
+									OSSO_IAP_REQUESTED_CONNECT);
+	PyModule_AddIntConstant(module, "TIMED_CONNECT",
+									OSSO_IAP_TIMED_CONNECT);
+
+	PyModule_AddIntConstant(module, "CONNECTED",
+									OSSO_IAP_CONNECTED);
+	PyModule_AddIntConstant(module, "DISCONNECTED",
+									OSSO_IAP_DISCONNECTED);
+	PyModule_AddIntConstant(module, "ERROR",
+									OSSO_IAP_ERROR);
+	PyModule_AddIntConstant(module, "STATISTICS",
+									OSSO_IAP_STATISTICS);
+	PyModule_AddStringConstant(module, "IAP_ASK",
+									OSSO_IAP_ASK);
+	PyModule_AddStringConstant(module, "IAP_ANY",
+									OSSO_IAP_ANY);
+	PyModule_AddIntConstant(module, "INVALID_IAP",
+									OSSO_ERROR_INVALID_IAP);
+	PyModule_AddIntConstant(module, "IAP_FAILED",
+									OSSO_ERROR_IAP_FAILED);
+	PyModule_AddIntConstant(module, "IAP_NOT_AVAILABLE",
+									OSSO_ERROR_IAP_NOT_AVAILABLE);
+	PyModule_AddIntConstant(module, "BIND_FAILED",
+									OSSO_ERROR_BIND_FAILED);
+
 	return;
 }
+
+static void
+_wrap_ic_callback_handler (struct iap_event_t *event, void *arg);
 
 PyMODINIT_FUNC
 initic(void)
@@ -306,30 +342,57 @@ initic(void)
 	Py_INCREF(&IapEventType);
 	PyModule_AddObject(module, "IapEvent", (PyObject *)&IapEventType);
 
-	/* add contants */
-	/* : */
-	/* : */
-	/* : */
+	/* add constants */
+	add_constants(module);
+
+	osso_iap_cb(_wrap_ic_callback_handler);
+	
+	/* DBus problems... */
+    dbus_connection_setup_with_g_main(dbus_bus_get(DBUS_BUS_SYSTEM, NULL), NULL);
 }
 
 	
+/* Callback for osso-ic events
+ *
+ * event - The event sent.
+ * arg - Tuple with python callback and user data
+ */
 static void
 _wrap_ic_callback_handler (struct iap_event_t *event, void *arg)
 {
 	PyObject *py_args = NULL;
-	PyObject *uris = NULL;
+	IapEvent *py_evt = NULL;
+
 	PyGILState_STATE state;
 
 	state = PyGILState_Ensure();
 
-	if (ic_callback == NULL) {
+	g_debug("_c_ic_handler");
+
+	if (ic_callback == NULL){
+		g_debug("No python callback setup. Returning.");
 		return;
 	}
 
-	uris = PyTuple_New(1);
-	py_args = Py_BuildValue("(OO)", uris, arg);
+	if (arg == NULL) {
+		g_debug("User data sent was null. Creating an empty tuple");
+		arg = PyTuple_New(0);
+	}
+
+	g_debug("Building event instance");
+	py_evt = (IapEvent*) IapEvent_new(&IapEventType, NULL, NULL);
+	py_evt->event = event;
+
+	g_debug("building values for callback (%p)(%p)", py_evt, arg);
+	/*py_args = Py_BuildValue("(OO)", py_evt, arg);*/
+	py_args = Py_BuildValue("(OO)", py_evt,arg);
+	g_debug("calling python function.");
 	PyEval_CallObject(ic_callback, py_args);
 
+	Py_XDECREF((PyObject *)arg);
+	Py_XDECREF(py_args);
+
+	g_debug("Called python function");
 	PyGILState_Release(state);
 	return;
 }
@@ -340,7 +403,6 @@ PyObject *
 IapIc_set_callback (PyObject *self, PyObject *args)
 {
 	PyObject *py_func = NULL;
-	osso_return_t ret;
 
 	if (!PyArg_ParseTuple(args, "O:osso.ic.set_callback", &py_func)) 
 		return NULL;
@@ -350,16 +412,14 @@ IapIc_set_callback (PyObject *self, PyObject *args)
 			PyErr_SetString(PyExc_TypeError, "callback parameter must be callable");
 			return NULL;
 		}
+
+		g_debug("Setting python callback variable");
 		Py_XINCREF(py_func);
 		Py_XDECREF(ic_callback);
 		ic_callback = py_func;
 	} else {
 		Py_XDECREF(ic_callback);
 		ic_callback = NULL;
-	}
-
-	if (ic_callback != NULL) {
-		ret = osso_iap_cb(_wrap_ic_callback_handler);
 	}
 	
 	Py_RETURN_NONE;
@@ -370,18 +430,28 @@ IapIc_connect(PyObject *self, PyObject *args, PyObject *kwargs)
 {
 	char *iap;
 	dbus_uint32_t flags;
-	PyObject *user_data;
+	PyObject *user_data = NULL;
 	int ret;
 
 	static char *kwlist[] = {"iap", "flags", "data", 0};
 
+	g_debug("parsing keywords");
 	if (!PyArg_ParseTupleAndKeywords(args, kwargs,
-			"si!O:osso.ic.connect", kwlist, &iap, &flags, &user_data))
+			"si|O:osso.ic.connect", kwlist, &iap, &flags, &user_data))
 		return NULL;
 
-	if (user_data == NULL)
-		user_data = Py_None;
+	g_debug("checking user_data for 'nullness' and tuple type");
+	if (user_data != NULL && !PyTuple_Check(user_data)) {
+		PyErr_SetString(PyExc_TypeError,
+						"Extra args must be in a tuple.");
+		return NULL;
+	}
 
+	g_debug("incrementing user_data refcount");
+	Py_XINCREF(user_data);
+
+	g_debug("Calling connect with iap(%s), flags(%x), data(%p)",
+		    iap, flags, user_data);
 	ret = osso_iap_connect(iap, flags, user_data);
 
 	return PyInt_FromLong(ret);
@@ -391,16 +461,33 @@ PyObject *
 IapIc_disconnect(PyObject *self, PyObject *args, PyObject *kwargs)
 {
 	char *iap;
-	PyObject *user_data;
+	PyObject *user_data = NULL;
 	int ret;
 
 	static char *kwlist[] = {"iap", "data", 0};
 
 	if (!PyArg_ParseTupleAndKeywords(args, kwargs,
-			"sO:osso.ic.disconnect", kwlist, &iap, &user_data))
+			"z|O:osso.ic.disconnect", kwlist, &iap, &user_data))
 		return NULL;
 
+	g_debug("checking user_data for 'nullness' and tuple type");
+	if (user_data != NULL && !PyTuple_Check(user_data)) {
+		PyErr_SetString(PyExc_TypeError,
+						"Extra args must be in a tuple.");
+		return NULL;
+	}
+
+	g_debug("incrementing user_data refcount");
+	Py_XINCREF(user_data);
+
+	g_debug("Calling disconnect with iap(%s), data(%p)",
+		    iap, user_data);
+
 	ret = osso_iap_disconnect(iap, user_data);
+	
+	if (ret != OSSO_OK) {
+		_set_exception(ret, NULL);
+	}
 
 	return PyInt_FromLong(ret);
 }
@@ -409,14 +496,27 @@ PyObject *
 IapIc_get_statistics(PyObject *self, PyObject *args, PyObject *kwargs)
 {
 	char *iap;
-	PyObject *user_data;
-	int ret;
+	PyObject *user_data = NULL;
+	int ret = -1;
 
 	static char *kwlist[] = {"iap", "data", 0};
 
 	if (!PyArg_ParseTupleAndKeywords(args, kwargs,
-			"sO:osso.ic.get_statistics", kwlist, &iap, &user_data))
+			"|sO:osso.ic.get_statistics", kwlist, &iap, &user_data))
 		return NULL;
+
+	g_debug("checking user_data for 'nullness' and tuple type");
+	if (user_data != NULL && !PyTuple_Check(user_data)) {
+		PyErr_SetString(PyExc_TypeError,
+						"Extra args must be in a tuple.");
+		return NULL;
+	}
+
+	g_debug("incrementing user_data refcount");
+	Py_XINCREF(user_data);
+
+	g_debug("Calling get_statistics with iap(%s), data(%p)",
+		    iap, user_data);
 
 	ret = osso_iap_get_statistics(iap, user_data);
 
