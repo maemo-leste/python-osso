@@ -18,7 +18,7 @@ common_include_dirs = ['/usr/include',
                        '/usr/include/glib-2.0', '/usr/lib/glib-2.0/include',
                        '/usr/include/pygtk-2.0',
                        '/usr/include/gtk-2.0', '/usr/lib/gtk-2.0/include',
-                       '/usr/include/pango-1.0']
+                       '/usr/include/pango-1.0', '/usr/include/cairo']
 
 common_libraries = ['osso',
                     'ossohelp',
@@ -26,7 +26,8 @@ common_libraries = ['osso',
                     'dbus-1',
                     'glib-2.0',
                     'gtk-x11-2.0',
-                    'pango-1.0']
+                    'pango-1.0',
+                    'cairo']
 
 mime_include_dirs = ['/usr/include/gnome-vfs-2.0']
 
