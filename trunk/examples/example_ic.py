@@ -1,4 +1,5 @@
 # Simple example of using osso.ic module
+# Clicking the connect button will trigger a statistics request each second
 # Author: Lauro Moura <lauro.neto@indt.org.br>
 
 
