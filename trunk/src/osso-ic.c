@@ -120,8 +120,6 @@ IapEvent_get_extra(IapEvent *self, void *closure)
 	int type = 0;
 
 	if (closure == NULL || self == NULL || self->event == NULL){
-		g_debug("Got a null arg (%p)(%p)(%p)", closure, self, self->event);
-
 		Py_INCREF(Py_None);
 		return Py_None;
 	}
@@ -367,32 +365,23 @@ _wrap_ic_callback_handler (struct iap_event_t *event, void *arg)
 
 	state = PyGILState_Ensure();
 
-	g_debug("_c_ic_handler");
-
 	if (ic_callback == NULL){
-		g_debug("No python callback setup. Returning.");
 		return;
 	}
 
 	if (arg == NULL) {
-		g_debug("User data sent was null. Creating an empty tuple");
 		arg = PyTuple_New(0);
 	}
 
-	g_debug("Building event instance");
 	py_evt = (IapEvent*) IapEvent_new(&IapEventType, NULL, NULL);
 	py_evt->event = event;
 
-	g_debug("building values for callback (%p)(%p)", py_evt, arg);
-	/*py_args = Py_BuildValue("(OO)", py_evt, arg);*/
 	py_args = Py_BuildValue("(OO)", py_evt,arg);
-	g_debug("calling python function.");
 	PyEval_CallObject(ic_callback, py_args);
 
 	Py_XDECREF((PyObject *)arg);
 	Py_XDECREF(py_args);
 
-	g_debug("Called python function");
 	PyGILState_Release(state);
 	return;
 }
@@ -413,7 +402,6 @@ IapIc_set_callback (PyObject *self, PyObject *args)
 			return NULL;
 		}
 
-		g_debug("Setting python callback variable");
 		Py_XINCREF(py_func);
 		Py_XDECREF(ic_callback);
 		ic_callback = py_func;
@@ -435,23 +423,18 @@ IapIc_connect(PyObject *self, PyObject *args, PyObject *kwargs)
 
 	static char *kwlist[] = {"iap", "flags", "data", 0};
 
-	g_debug("parsing keywords");
 	if (!PyArg_ParseTupleAndKeywords(args, kwargs,
 			"si|O:osso.ic.connect", kwlist, &iap, &flags, &user_data))
 		return NULL;
 
-	g_debug("checking user_data for 'nullness' and tuple type");
 	if (user_data != NULL && !PyTuple_Check(user_data)) {
 		PyErr_SetString(PyExc_TypeError,
 						"Extra args must be in a tuple.");
 		return NULL;
 	}
 
-	g_debug("incrementing user_data refcount");
 	Py_XINCREF(user_data);
 
-	g_debug("Calling connect with iap(%s), flags(%x), data(%p)",
-		    iap, flags, user_data);
 	ret = osso_iap_connect(iap, flags, user_data);
 
 	return PyInt_FromLong(ret);
@@ -470,18 +453,13 @@ IapIc_disconnect(PyObject *self, PyObject *args, PyObject *kwargs)
 			"z|O:osso.ic.disconnect", kwlist, &iap, &user_data))
 		return NULL;
 
-	g_debug("checking user_data for 'nullness' and tuple type");
 	if (user_data != NULL && !PyTuple_Check(user_data)) {
 		PyErr_SetString(PyExc_TypeError,
 						"Extra args must be in a tuple.");
 		return NULL;
 	}
 
-	g_debug("incrementing user_data refcount");
 	Py_XINCREF(user_data);
-
-	g_debug("Calling disconnect with iap(%s), data(%p)",
-		    iap, user_data);
 
 	ret = osso_iap_disconnect(iap, user_data);
 	
@@ -505,18 +483,13 @@ IapIc_get_statistics(PyObject *self, PyObject *args, PyObject *kwargs)
 			"|sO:osso.ic.get_statistics", kwlist, &iap, &user_data))
 		return NULL;
 
-	g_debug("checking user_data for 'nullness' and tuple type");
 	if (user_data != NULL && !PyTuple_Check(user_data)) {
 		PyErr_SetString(PyExc_TypeError,
 						"Extra args must be in a tuple.");
 		return NULL;
 	}
 
-	g_debug("incrementing user_data refcount");
 	Py_XINCREF(user_data);
-
-	g_debug("Calling get_statistics with iap(%s), data(%p)",
-		    iap, user_data);
 
 	ret = osso_iap_get_statistics(iap, user_data);
 
