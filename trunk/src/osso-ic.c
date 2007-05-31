@@ -315,7 +315,6 @@ add_constants(PyObject *module)
 									OSSO_ERROR_IAP_NOT_AVAILABLE);
 	PyModule_AddIntConstant(module, "BIND_FAILED",
 									OSSO_ERROR_BIND_FAILED);
-
 	return;
 }
 
@@ -323,7 +322,7 @@ static void
 _wrap_ic_callback_handler (struct iap_event_t *event, void *arg);
 
 PyMODINIT_FUNC
-initic(void)
+init_ic(void)
 {
 	PyObject *module;
 
@@ -333,7 +332,7 @@ initic(void)
 	}
 
 	/* initialize module */
-	module = Py_InitModule3("ic", osso_ic_methods, NULL);
+	module = Py_InitModule3("_ic", osso_ic_methods, NULL);
 			
 
 	/* add types */

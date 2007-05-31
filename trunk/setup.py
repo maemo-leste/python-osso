@@ -54,7 +54,11 @@ osso_modules = [ Extension('application', sources = ['src/osso-application.c', '
                             libraries = common_libraries,
                             include_dirs = common_include_dirs,
                             extra_compile_args = common_compile_args),
-                 Extension('ic', sources = ['src/osso-ic.c', 'src/osso-helper.c'],
+                 Extension('ic._ic', sources = ['src/osso-ic.c', 'src/osso-helper.c'],
+                            libraries = common_libraries + osso_ic_libraries,
+                            include_dirs = common_include_dirs,
+                            extra_compile_args = common_compile_args),
+                 Extension('ic.constants', sources = ['src/osso-ic-constants.c'],
                             libraries = common_libraries + osso_ic_libraries,
                             include_dirs = common_include_dirs,
                             extra_compile_args = common_compile_args),
@@ -99,7 +103,7 @@ setup(
         author = 'Osvaldo Santana Neto',
         author_email = 'osvaldo.santana@indt.org.br',
         url = 'http://www.maemo.org',
-        py_modules=["osso/__init__"],
+        py_modules=["osso/__init__", "osso/ic/__init__"],
         ext_package = 'osso',
         ext_modules = osso_modules
 )
