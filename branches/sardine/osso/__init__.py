@@ -26,6 +26,7 @@ from application import Application
 from autosave import Autosave
 from device_state import DeviceState
 from help import Help
+from locale import Locale
 from mime import Mime
 from plugin import Plugin
 from rpc import Rpc

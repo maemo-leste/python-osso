@@ -210,7 +210,7 @@ Context_set_locale_notification_callback(Context *self, PyObject *args, PyObject
 
 	if (!PyArg_ParseTupleAndKeywords(args, kwds, "O|O:Context.locale_set_notification_callback",
 				kwlist, &py_func, &py_data)) {
-		return PyInt_FromLong(OSSO_INVALID);
+		return ossoret_to_pyobj(OSSO_INVALID);
 	}
 
 	if (py_data == NULL)
@@ -218,7 +218,7 @@ Context_set_locale_notification_callback(Context *self, PyObject *args, PyObject
 	if (py_func != Py_None) {
 		if (!PyCallable_Check(py_func)) {
 			PyErr_SetString(PyExc_TypeError, "callback parameter must be callable");
-			return PyInt_FromLong(OSSO_INVALID);
+			return ossoret_to_pyobj(OSSO_INVALID);
 		}
 		Py_XINCREF(py_func);
 		Py_XDECREF(set_locale_callback);
@@ -232,10 +232,10 @@ Context_set_locale_notification_callback(Context *self, PyObject *args, PyObject
 
 	if (ret != OSSO_OK) {
 		_set_exception(ret, NULL);
-		return PyInt_FromLong(ret);
+		return ossoret_to_pyobj(ret);
 	}
 
-	return PyInt_FromLong(OSSO_OK);
+	return ossoret_to_pyobj(OSSO_OK);
 }
 
 

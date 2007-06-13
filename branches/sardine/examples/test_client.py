@@ -21,7 +21,7 @@ def handler_test_force_autosave(widget, as):
 def handler_test_locale(widget, local):
     print widget.get_label()
     local.set_locale_notification_callback(locale_cb, "Send some user data!")
-    local.set_locale("en_GB")
+    print local.set_locale("en_GB")
 
 def handler_test_set_handler(widget, rpc):
     print widget.get_label()

@@ -55,6 +55,7 @@ PyObject *_rpc_t_to_python(osso_rpc_t *arg);
 void _python_to_rpc_t(PyObject *py_arg, osso_rpc_t *rpc_arg);
 PyObject *_rpc_args_c_to_py(GArray *args);
 void _argfill(DBusMessage *msg, void *raw_tuple);
+PyObject *ossoret_to_pyobj(osso_return_t osso_ret);
 
 /* Context */
 typedef struct {
