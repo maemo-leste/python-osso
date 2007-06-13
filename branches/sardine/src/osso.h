@@ -151,6 +151,10 @@ PyObject *Context_set_exit_callback(Context *self, PyObject *args, PyObject *kwd
 PyObject *Context_help_show(Context *self, PyObject *args, PyObject *kwds);
 PyObject *Context_help_dialog_help_enable(Context *self, PyObject *args, PyObject *kwds);
 
+/* Locale */
+PyObject *Context_set_locale_notification_callback(Context *self, PyObject *args, PyObject *kwds);
+PyObject *Context_set_locale(Context *self, PyObject *args);
+
 #endif
 
 /* vim:ts=4:noet:sw=4:sws=4:si:ai:showmatch:foldmethod=indent

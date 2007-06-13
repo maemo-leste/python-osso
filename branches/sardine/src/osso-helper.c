@@ -194,5 +194,27 @@ _argfill(DBusMessage *msg, void *raw_tuple)
 	}
 }
 
+PyObject *
+ossoret_to_pyobj(osso_return_t osso_ret)
+{
+	switch (osso_ret) {
+		case OSSO_ERROR:
+			return PyString_FromString("OSSO_ERROR");
+		case OSSO_INVALID:
+			return PyString_FromString("OSSO_INVALID");
+		case OSSO_OK:
+			return PyString_FromString("OSSO_OK");
+		case OSSO_RPC_ERROR:
+			return PyString_FromString("OSSO_RPC_ERROR");
+		case OSSO_ERROR_NAME:
+			return PyString_FromString("OSSO_ERROR_NAME");
+		case OSSO_ERROR_NO_STATE:
+			return PyString_FromString("OSSO_ERROR_NO_STATE");
+		case OSSO_ERROR_STATE_SIZE:
+			return PyString_FromString("OSSO_ERROR_STATE_SIZE");
+	}
+	return NULL;
+}
+
 /* vim:ts=4:noet:sw=4:sws=4:si:ai:showmatch:foldmethod=indent
  */
