@@ -162,6 +162,7 @@ inithelp(void)
 	Py_INCREF(&HelpType);
 	PyModule_AddObject(module, "Help", (PyObject *)&HelpType);
 
+	_load_exceptions();
 	/* add contants */
 	/* : */
 	/* : */

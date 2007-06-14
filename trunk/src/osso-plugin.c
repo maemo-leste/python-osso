@@ -168,6 +168,7 @@ initplugin(void)
 	Py_INCREF(&PluginType);
 	PyModule_AddObject(module, "Plugin", (PyObject *)&PluginType);
 
+	_load_exceptions();
 	/* add contants */
 	/* : */
 	/* : */

@@ -248,6 +248,7 @@ initmime(void)
 	Py_INCREF(&MimeType);
 	PyModule_AddObject(module, "Mime", (PyObject *)&MimeType);
 
+	_load_exceptions();
 	/* add contants */
 	/* : */
 	/* : */

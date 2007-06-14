@@ -54,7 +54,6 @@ _set_exception(osso_return_t err, osso_rpc_t *retval)
 		case OSSO_ERROR_NAME:
 			PyErr_SetString(OssoNameException, ((err_msg != NULL) ? err_msg : "Invalid name."));
 			break;
-			break;
 		case OSSO_ERROR_NO_STATE:
 			PyErr_SetString(OssoNoStateException, "No state file found to read.");
 			break;
@@ -191,6 +190,33 @@ _argfill(DBusMessage *msg, void *raw_tuple)
 		py_arg = PyTuple_GetItem(tuple, count);
 		_python_to_rpc_t(py_arg, &arg);
 		dbus_message_append_args(msg, arg.type, &arg.value, DBUS_TYPE_INVALID);
+	}
+}
+
+#define LOAD_EXCEPTION(x,module) \
+	x = (PyObject *)PyObject_GetAttrString( module, #x); \
+	if (x == NULL) { \
+		PyErr_SetString(PyExc_ImportError, "Cannot import " #x);\
+		return;\
+	}
+
+void _load_exceptions(void)
+{
+	PyObject *module;
+
+	if ((module = PyImport_ImportModule("osso.exceptions")) != NULL) {
+
+		LOAD_EXCEPTION(OssoException, module)
+		LOAD_EXCEPTION(OssoRPCException, module)
+		LOAD_EXCEPTION(OssoInvalidException, module)
+		LOAD_EXCEPTION(OssoNameException, module)
+		LOAD_EXCEPTION(OssoNoStateException, module)
+		LOAD_EXCEPTION(OssoStateSizeException, module)
+
+	} else {
+		PyErr_SetString(PyExc_ImportError,
+						"Cannot import osso.exceptions module");
+		return;
 	}
 }
 

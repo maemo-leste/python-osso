@@ -161,6 +161,7 @@ initstate_saving(void)
 	Py_INCREF(&StateSavingType);
 	PyModule_AddObject(module, "StateSaving", (PyObject *)&StateSavingType);
 
+	_load_exceptions();
 	/* add contants */
 	/* : */
 	/* : */

@@ -34,7 +34,11 @@ osso_ic_libraries = ['osso-ic']
 mime_libraries = ['ossomime']
 
 #Modules to be built
-osso_modules = [ Extension('application', sources = ['src/osso-application.c', 'src/osso-helper.c'],
+osso_modules = [ Extension('exceptions', sources = ['src/osso-exceptions.c'],
+                            libraries = common_libraries,
+                            include_dirs = common_include_dirs,
+                            extra_compile_args = common_compile_args),
+                Extension('application', sources = ['src/osso-application.c', 'src/osso-helper.c'],
                             libraries = common_libraries,
                             include_dirs = common_include_dirs,
                             extra_compile_args = common_compile_args),
@@ -94,7 +98,7 @@ osso_modules = [ Extension('application', sources = ['src/osso-application.c', '
                             libraries = common_libraries,
                             include_dirs = common_include_dirs,
                             extra_compile_args = common_compile_args),
-               ]
+              ]
 
 setup(
         name = 'osso',

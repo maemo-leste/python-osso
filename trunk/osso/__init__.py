@@ -22,6 +22,14 @@
 #
 
 from context import Context
+
+from exceptions import OssoException
+from exceptions import OssoRPCException
+from exceptions import OssoInvalidException
+from exceptions import OssoNameException
+from exceptions import OssoNoStateException
+from exceptions import OssoStateSizeException
+
 from application import Application
 from autosave import Autosave
 from device_state import DeviceState

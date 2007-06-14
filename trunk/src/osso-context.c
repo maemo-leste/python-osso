@@ -156,32 +156,11 @@ initcontext(void)
 	module = Py_InitModule3("context", osso_methods,
 			"FIXME: put documentation about Context module.");
 
-	/* add exceptions */
-	OssoException = PyErr_NewException("osso.OssoException", 0, 0);
-	OssoRPCException = PyErr_NewException("osso.OssoRPCException", OssoException, 0);
-	OssoInvalidException = PyErr_NewException("osso.OssoInvalidException", OssoException, 0);
-	OssoNameException = PyErr_NewException("osso.OssoNameException", OssoException, 0);
-	OssoNoStateException = PyErr_NewException("osso.OssoNoStateException", OssoException, 0);
-	OssoStateSizeException = PyErr_NewException("osso.OssoStateSizeException", OssoException, 0);
-
-	Py_INCREF(OssoException);
-	Py_INCREF(OssoRPCException);
-	Py_INCREF(OssoInvalidException);
-	Py_INCREF(OssoNameException);
-	Py_INCREF(OssoNoStateException);
-	Py_INCREF(OssoStateSizeException);
-
-	PyModule_AddObject(module, "OssoException", OssoException);
-	PyModule_AddObject(module, "OssoRPCException", OssoRPCException);
-	PyModule_AddObject(module, "OssoInvalidException", OssoInvalidException);
-	PyModule_AddObject(module, "OssoNameException", OssoNameException);
-	PyModule_AddObject(module, "OssoNoStateException", OssoNoStateException);
-	PyModule_AddObject(module, "OssoStateSizeException", OssoStateSizeException);
-
 	/* add types */
 	Py_INCREF(&ContextType);
 	PyModule_AddObject(module, "Context", (PyObject *)&ContextType);
 
+	_load_exceptions();
 	/* add contants */
 	/* : */
 	/* : */

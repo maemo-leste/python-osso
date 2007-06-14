@@ -71,6 +71,8 @@ typedef struct {
 /* Context type default methods */
 char _check_context(osso_context_t *context);
 void _set_exception(osso_return_t err, osso_rpc_t *retval);
+void _load_exceptions(void);
+
 PyObject *Context_new(PyTypeObject *type, PyObject *args, PyObject *kwds);
 int Context_init(Context *self, PyObject *args, PyObject *kwds);
 PyObject *Context_close(Context *self);

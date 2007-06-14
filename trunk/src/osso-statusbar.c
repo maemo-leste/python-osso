@@ -159,6 +159,7 @@ initstatusbar(void)
 	Py_INCREF(&StatusbarType);
 	PyModule_AddObject(module, "Statusbar", (PyObject *)&StatusbarType);
 
+	_load_exceptions();
 	/* add contants */
 	/* : */
 	/* : */

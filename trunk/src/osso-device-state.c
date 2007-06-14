@@ -182,6 +182,7 @@ initdevice_state(void)
 	Py_INCREF(&DeviceStateType);
 	PyModule_AddObject(module, "DeviceState", (PyObject *)&DeviceStateType);
 
+	_load_exceptions();
 	/* add contants */
 	/* : */
 	/* : */
