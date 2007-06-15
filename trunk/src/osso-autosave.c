@@ -207,7 +207,7 @@ PyObject *
 Context_set_autosave_callback(Context *self, PyObject *args, PyObject *kwds)
 {
 	PyObject *py_func = NULL;
-	PyObject *py_data = NULL;
+	PyObject *py_data = Py_None;
 	osso_return_t ret;
 
 	static char *kwlist[] = { "callback", "user_data", 0 };
@@ -234,6 +234,7 @@ Context_set_autosave_callback(Context *self, PyObject *args, PyObject *kwds)
 	}
 
 	if (autosave_callback != NULL) {
+		Py_INCREF(py_data);
 		ret = osso_application_set_autosave_cb(self->context,
 				_wrap_autosave_callback_handler, py_data);
 	} else {
