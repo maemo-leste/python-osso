@@ -5,6 +5,7 @@ import gobject
 
 # Example of using osso.DeviceState.display_state_on
 # You need to set the display brightness period to 10 seconds. 
+# This example will bright the display after each 11 seconds.
 
 count = 0
 
