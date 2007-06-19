@@ -374,7 +374,7 @@ Context_mime_open_file (Context *self, PyObject *args, PyObject *kwds)
 PyObject *
 Context_mime_open_file_list (Context *self, PyObject *args, PyObject *kwds)
 {
-	PyObject *uri_list;
+	PyObject *uri_list = NULL;
 	gint result;
 	DBusConnection *dbus_conn;
 	DBusError error;
@@ -390,7 +390,7 @@ Context_mime_open_file_list (Context *self, PyObject *args, PyObject *kwds)
 	if (!_check_context(self->context)) return 0;
 
 	if (!PyArg_ParseTupleAndKeywords(args, kwds,
-				"O!:Mime.open_file_list", kwlist, PyList_Type, &uri_list)) {
+				"O!:Mime.open_file_list", kwlist, &PyList_Type, &uri_list)) {
 		ok = FALSE;
 		goto CLEAN_UP;
 	}
