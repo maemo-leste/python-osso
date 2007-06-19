@@ -191,7 +191,6 @@ Context_help_show(Context *self, PyObject *args, PyObject *kwds){
 		return NULL;
 	}
 
-	/* redo this!*/
 	Py_RETURN_NONE;
 }
 
@@ -225,11 +224,10 @@ Context_help_dialog_help_enable(Context *self, PyObject *args, PyObject *kwds){
 
 	ret = ossohelp_dialog_help_enable(GTK_DIALOG(dialog->obj), topic_id, self->context);
 	if (ret==FALSE) {
-		_set_exception(ret, NULL);
-		return NULL;
+		Py_RETURN_FALSE;
 	}
-	/* redo this! */
-	Py_RETURN_NONE;
+
+	Py_RETURN_TRUE;
 }
 
 /* vim:ts=4:noet:sw=4:sws=4:si:ai:showmatch:foldmethod=indent
