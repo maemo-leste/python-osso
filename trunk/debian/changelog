@@ -1,3 +1,12 @@
+python-osso (0.2-1osso4) unstable; urgency=low
+
+  * fix #919, #924, #928, #929 and #942 (Lauro Moura)
+  * osso-ic support included (Lauro Moura)
+  * new osso examples (Lauro Moura)
+  * osso-help support included (Luciano Wolf)
+
+ -- Luciano Miguel Wolf <luciano.wolf@indt.org.br>  Mon, 25 Jun 2007 16:34:30 -0300
+
 python-osso (0.2-1osso3) unstable; urgency=low
 
   * Added support to osso-mime 
