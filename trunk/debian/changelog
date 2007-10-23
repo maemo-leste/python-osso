@@ -1,3 +1,10 @@
+python-osso (0.2-1osso5) unstable; urgency=low
+
+  * Added new examples to -dev package
+  * Base package with .pyo instead of .py or .pyc
+
+ -- Luciano Miguel Wolf <luciano.wolf@indt.org.br>  Tue, 23 Oct 2007 17:43:20 -0300
+
 python-osso (0.2-1osso4) unstable; urgency=low
 
   * fix #919, #924, #928, #929 and #942 (Lauro Moura)
