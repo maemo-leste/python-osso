@@ -25,7 +25,7 @@ from context import Context
 from application import Application
 from autosave import Autosave
 from device_state import DeviceState
-from help import Help
+#from help import Help
 from locale import Locale
 #from mime import Mime
 from plugin import Plugin

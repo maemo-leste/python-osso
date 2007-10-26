@@ -1,3 +1,9 @@
+python-osso (0.3-1osso3) unstable; urgency=low
+
+  * Fixed __init__.py - Do not import help module.
+
+ -- Lauro Moura Neto <lauro.neto@openbossa.org>  Fri, 26 Oct 2007 14:45:41 -0300
+
 python-osso (0.3-1osso2) unstable; urgency=low
 
   * mime and ic modules removed 
