@@ -1,5 +1,5 @@
 import time
-from alarmd import *
+from osso.alarmd import *
 
 # set alarm for 60 seconds in the future
 alarm_time=long(time.time()+5)
