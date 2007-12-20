@@ -107,7 +107,7 @@ setup(
         author = 'Osvaldo Santana Neto',
         author_email = 'osvaldo.santana@indt.org.br',
         url = 'http://www.maemo.org',
-        py_modules=["osso/__init__", "osso/ic/__init__"],
+        py_modules=["osso/__init__", "osso/ic/__init__", "osso/alarmd"],
         ext_package = 'osso',
         ext_modules = osso_modules
 )

@@ -1,3 +1,9 @@
+python-osso (0.2-1osso6) unstable; urgency=low
+
+  * Adding alarmd.py by Gene Cash.
+
+ -- Lauro Moura Maranhao Neto <lauro.neto@openbossa.org>  Tue, 18 Dec 2007 16:15:43 -0300
+
 python-osso (0.2-1osso5) unstable; urgency=low
 
   * Added new examples to -dev package
