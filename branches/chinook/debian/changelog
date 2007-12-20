@@ -1,3 +1,9 @@
+python-osso (0.3-1osso4) unstable; urgency=low
+
+  * Adding alarmd.py from Gene Cash. 
+
+ -- Lauro Moura Maranhao Neto <lauro.neto@openbossa.org>  Thu, 20 Dec 2007 16:53:24 -0300
+
 python-osso (0.3-1osso3) unstable; urgency=low
 
   * Fixed __init__.py - Do not import help module.

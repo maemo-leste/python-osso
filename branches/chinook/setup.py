@@ -26,8 +26,7 @@ common_libraries = ['osso',
                     'dbus-1',
                     'glib-2.0',
                     'gtk-x11-2.0',
-                    'pango-1.0',
-                    'cairo']
+                    'pango-1.0']
 
 mime_include_dirs = ['/usr/include/gnome-vfs-2.0']
 
@@ -104,7 +103,7 @@ setup(
         author = 'Osvaldo Santana Neto',
         author_email = 'osvaldo.santana@indt.org.br',
         url = 'http://www.maemo.org',
-        py_modules=["osso/__init__"],
+        py_modules=["osso/__init__", "osso/alarmd"],
         ext_package = 'osso',
         ext_modules = osso_modules
 )
