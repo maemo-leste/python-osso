@@ -161,7 +161,8 @@ initstate_saving(void)
 	Py_INCREF(&StateSavingType);
 	PyModule_AddObject(module, "StateSaving", (PyObject *)&StateSavingType);
 
-	/* add contants */
+    _load_exceptions();
+    /* add contants */
 	/* : */
 	/* : */
 	/* : */
@@ -209,13 +210,19 @@ Context_state_read(Context *self)
 	osso_return_t ret = OSSO_OK;
 	PyObject *py_marshal_state = NULL;
 
-	if (!_check_context(self->context)) return 0;
+	if (!_check_context(self->context)) {
+		PyErr_SetString(PyExc_ValueError, "Invalid context");
+		return NULL;
+	}
 
 	osso_state.state_size = 0;
 	osso_state.state_data = NULL;
 
 	ret = osso_state_read(self->context, &osso_state);
-	if (ret != OSSO_OK) {
+    if (ret == OSSO_ERROR_NO_STATE) {
+        PyErr_SetString(OssoNoStateException, "No state found");
+        return NULL;
+    } else if (ret != OSSO_OK) {
 		_set_exception(ret, NULL);
 		return NULL;
 	}

@@ -202,6 +202,8 @@ initrpc(void)
 	Py_INCREF(&RpcType);
 	PyModule_AddObject(module, "Rpc", (PyObject *)&RpcType);
 
+	_load_exceptions();
+
 	/* add contants */
 	/* : */
 	/* : */

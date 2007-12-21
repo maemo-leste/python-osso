@@ -168,6 +168,7 @@ initsystem_note(void)
 	Py_INCREF(&SystemNoteType);
 	PyModule_AddObject(module, "SystemNote", (PyObject *)&SystemNoteType);
 
+	_load_exceptions();
 	/* add contants */
 	/* : */
 	/* : */

@@ -194,6 +194,33 @@ _argfill(DBusMessage *msg, void *raw_tuple)
 	}
 }
 
+#define LOAD_EXCEPTION(x,module) \
+	x = (PyObject *)PyObject_GetAttrString( module, #x); \
+	if (x == NULL) { \
+		PyErr_SetString(PyExc_ImportError, "Cannot import " #x);\
+		return;\
+	}
+
+void _load_exceptions(void)
+{
+	PyObject *module;
+
+	if ((module = PyImport_ImportModule("osso.exceptions")) != NULL) {
+
+		LOAD_EXCEPTION(OssoException, module)
+		LOAD_EXCEPTION(OssoRPCException, module)
+		LOAD_EXCEPTION(OssoInvalidException, module)
+		LOAD_EXCEPTION(OssoNameException, module)
+		LOAD_EXCEPTION(OssoNoStateException, module)
+		LOAD_EXCEPTION(OssoStateSizeException, module)
+
+	} else {
+		PyErr_SetString(PyExc_ImportError,
+						"Cannot import osso.exceptions module");
+		return;
+	}
+}
+
 PyObject *
 ossoret_to_pyobj(osso_return_t osso_ret)
 {

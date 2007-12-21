@@ -34,7 +34,11 @@ mime_include_dirs = ['/usr/include/gnome-vfs-2.0']
 #mime_libraries = ['ossomime']
 
 #Modules to be built
-osso_modules = [ Extension('application', sources = ['src/osso-application.c', 'src/osso-helper.c'],
+osso_modules = [ Extension('exceptions', sources = ['src/osso-exceptions.c'],
+                            libraries = common_libraries,
+                            include_dirs = common_include_dirs,
+                            extra_compile_args = common_compile_args),
+                 Extension('application', sources = ['src/osso-application.c', 'src/osso-helper.c'],
                             libraries = common_libraries,
                             include_dirs = common_include_dirs,
                             extra_compile_args = common_compile_args),
@@ -50,14 +54,6 @@ osso_modules = [ Extension('application', sources = ['src/osso-application.c', '
                             libraries = common_libraries,
                             include_dirs = common_include_dirs,
                             extra_compile_args = common_compile_args),
-#                 Extension('help', sources = ['src/osso-helplib.c', 'src/osso-helper.c'],
-#                            libraries = common_libraries,
-#                            include_dirs = common_include_dirs,
-#                            extra_compile_args = common_compile_args),
-#                 Extension('ic', sources = ['src/osso-ic.c', 'src/osso-helper.c'],
-#                            libraries = common_libraries + osso_ic_libraries,
-#                            include_dirs = common_include_dirs,
-#                            extra_compile_args = common_compile_args),
                  Extension('locale', sources = ['src/osso-locale.c', 'src/osso-helper.c'],
                             libraries = common_libraries,# + osso_ic_libraries,
                             include_dirs = common_include_dirs,

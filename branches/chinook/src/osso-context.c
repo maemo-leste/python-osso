@@ -182,6 +182,7 @@ initcontext(void)
 	Py_INCREF(&ContextType);
 	PyModule_AddObject(module, "Context", (PyObject *)&ContextType);
 
+	_load_exceptions();
 	/* add contants */
 	/* : */
 	/* : */

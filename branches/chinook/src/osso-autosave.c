@@ -176,6 +176,8 @@ initautosave(void)
 	Py_INCREF(&AutosaveType);
 	PyModule_AddObject(module, "Autosave", (PyObject *)&AutosaveType);
 
+	_load_exceptions();
+
 	/* add contants */
 	/* : */
 	/* : */
