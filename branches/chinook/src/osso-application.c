@@ -180,7 +180,7 @@ Context_application_top(Context *self, PyObject *args, PyObject *kwds)
 
 	if (!_check_context(self->context)) return 0;
 
-	if (!PyArg_ParseTupleAndKeywords(args, kwds, "s|s:Context.application_top",
+	if (!PyArg_ParseTupleAndKeywords(args, kwds, "s|z:Context.application_top",
 				kwlist, &application, &arguments))
 	{
 		return NULL;
