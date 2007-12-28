@@ -234,6 +234,11 @@ Context_set_autosave_callback(Context *self, PyObject *args, PyObject *kwds)
 		autosave_callback = NULL;
 	}
 
+    if (py_data == NULL) {
+        py_data = Py_None;
+        Py_INCREF(py_data);
+    }
+
 	if (autosave_callback != NULL) {
 		ret = osso_application_set_autosave_cb(self->context,
 				_wrap_autosave_callback_handler, py_data);

@@ -244,12 +244,12 @@ Context_set_device_state_callback(Context *self, PyObject *args, PyObject *kwds)
 	char save_data = 0;
 	char memory_low = 0;
 	char system_inactivity = 0;
-	char *mode = NULL;
+	char *mode = "normal";
 	osso_hw_state_t hw_state;
 	osso_return_t ret;
 
-	static char *kwlist[] = { "callback", "user_data", "shutdown", "save_data",
-		"memory_low", "system_inactivity", "mode", 0 };
+	static char *kwlist[] = { "callback", "shutdown", "save_data",
+		"memory_low", "system_inactivity", "mode", "user_data", 0 };
 
 	if (!_check_context(self->context)) return 0;
 
@@ -272,7 +272,7 @@ Context_set_device_state_callback(Context *self, PyObject *args, PyObject *kwds)
 		Py_XDECREF(device_state_callback);
 		device_state_callback = NULL;
 	}
-	
+
 	hw_state.shutdown_ind = shutdown;
 	hw_state.save_unsaved_data_ind = save_data;
 	hw_state.memory_low_ind = memory_low;
