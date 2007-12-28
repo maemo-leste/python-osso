@@ -1,11 +1,12 @@
 python-osso (0.3-1osso4) unstable; urgency=low
 
-  * Adding alarmd.py from Gene Cash.
+  * Adding alarmd.py from Gene Cash
   * Fix in AutoSave (None as default argument)
   * Fix parameter order in DeviceState.set_device_state_cb
   * Fix default parameter in DeviceState.set_device_state_cb
+  * Added examples from bora to -dev package 
 
- -- Lauro Moura Maranhao Neto <lauro.neto@openbossa.org>  Fri, 28 Dec 2007 17:43:38 -0300
+ -- Lauro Moura Maranhao Neto <lauro.neto@openbossa.org>  Fri, 28 Dec 2007 17:50:29 -0300
 
 python-osso (0.3-1osso3) unstable; urgency=low
 
