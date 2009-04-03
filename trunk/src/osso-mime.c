@@ -248,7 +248,6 @@ initmime(void)
 	Py_INCREF(&MimeType);
 	PyModule_AddObject(module, "Mime", (PyObject *)&MimeType);
 
-	_load_exceptions();
 	/* add contants */
 	/* : */
 	/* : */
@@ -374,7 +373,7 @@ Context_mime_open_file (Context *self, PyObject *args, PyObject *kwds)
 PyObject *
 Context_mime_open_file_list (Context *self, PyObject *args, PyObject *kwds)
 {
-	PyObject *uri_list = NULL;
+	PyObject *uri_list;
 	gint result;
 	DBusConnection *dbus_conn;
 	DBusError error;
@@ -390,7 +389,7 @@ Context_mime_open_file_list (Context *self, PyObject *args, PyObject *kwds)
 	if (!_check_context(self->context)) return 0;
 
 	if (!PyArg_ParseTupleAndKeywords(args, kwds,
-				"O!:Mime.open_file_list", kwlist, &PyList_Type, &uri_list)) {
+				"O!:Mime.open_file_list", kwlist, PyList_Type, &uri_list)) {
 		ok = FALSE;
 		goto CLEAN_UP;
 	}

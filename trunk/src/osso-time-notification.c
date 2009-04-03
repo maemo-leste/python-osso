@@ -170,6 +170,7 @@ inittime_notification(void)
 	Py_INCREF(&TimeNotificationType);
 	PyModule_AddObject(module, "TimeNotification", (PyObject *)&TimeNotificationType);
 
+	_load_exceptions();
 	/* add contants */
 	/* : */
 	/* : */

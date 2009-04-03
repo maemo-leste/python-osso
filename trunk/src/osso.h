@@ -29,7 +29,7 @@
 #include <marshal.h>
 #include <time.h>
 #include <libosso.h>
-#include <osso-helplib.h>
+/*#include <osso-helplib.h>*/
 #include <pygtk/pygtk.h>
 
 #define DBUS_API_SUBJECT_TO_CHANGE
@@ -55,6 +55,7 @@ PyObject *_rpc_t_to_python(osso_rpc_t *arg);
 void _python_to_rpc_t(PyObject *py_arg, osso_rpc_t *rpc_arg);
 PyObject *_rpc_args_c_to_py(GArray *args);
 void _argfill(DBusMessage *msg, void *raw_tuple);
+PyObject *ossoret_to_pyobj(osso_return_t osso_ret);
 
 /* Context */
 typedef struct {
@@ -71,8 +72,6 @@ typedef struct {
 /* Context type default methods */
 char _check_context(osso_context_t *context);
 void _set_exception(osso_return_t err, osso_rpc_t *retval);
-void _load_exceptions(void);
-
 PyObject *Context_new(PyTypeObject *type, PyObject *args, PyObject *kwds);
 int Context_init(Context *self, PyObject *args, PyObject *kwds);
 PyObject *Context_close(Context *self);
@@ -152,6 +151,10 @@ PyObject *Context_set_exit_callback(Context *self, PyObject *args, PyObject *kwd
 /* HelpLib */
 PyObject *Context_help_show(Context *self, PyObject *args, PyObject *kwds);
 PyObject *Context_help_dialog_help_enable(Context *self, PyObject *args, PyObject *kwds);
+
+/* Locale */
+PyObject *Context_set_locale_notification_callback(Context *self, PyObject *args, PyObject *kwds);
+PyObject *Context_set_locale(Context *self, PyObject *args);
 
 #endif
 

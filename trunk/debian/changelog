@@ -1,24 +1,61 @@
-python-osso (0.2-1osso6) unstable; urgency=low
+python-osso (0.3-2maemo3) unstable; urgency=low
 
-  * Adding alarmd.py by Gene Cash.
+  * Put the pymaemo-developers mailing list address in "Maintainer" field.
 
- -- Lauro Moura Maranhao Neto <lauro.neto@openbossa.org>  Tue, 18 Dec 2007 16:15:43 -0300
+ -- Anderson Lizardo <anderson.lizardo@indt.org.br>  Wed, 01 Apr 2009 12:00:42 -0400
 
-python-osso (0.2-1osso5) unstable; urgency=low
+python-osso (0.3-2maemo2) unstable; urgency=low
 
-  * Added new examples to -dev package
-  * Base package with .pyo instead of .py or .pyc
+  * Change ${Source-Version} to ${source:Version}, because the former is deprecated
+  * Change version of python-osso-dev dependency from (= ${source:Version})
+    to (>= ${source:Version})
 
- -- Luciano Miguel Wolf <luciano.wolf@indt.org.br>  Tue, 23 Oct 2007 17:43:20 -0300
+ -- Bruno dos Santos de Araujo <bruno.araujo@indt.org.br>  Thu, 27 Nov 2008 08:22:27 -0400
 
-python-osso (0.2-1osso4) unstable; urgency=low
+python-osso (0.3-2maemo1) unstable; urgency=low
 
-  * fix #919, #924, #928, #929 and #942 (Lauro Moura)
-  * osso-ic support included (Lauro Moura)
-  * new osso examples (Lauro Moura)
-  * osso-help support included (Luciano Wolf)
+  * Build-Depends changes:
+    - python2.5-gtk2-dev -> python-gtk2-dev 
+    - python2.5-dev -> python-all-dev
+  * Package python2.5-osso is now python-osso
+  * python-osso Depends changes:
+    - python2.5-gtk2 -> python-gtk2
+    - python2.5 -> python-all
+  * Package python2.5-osso-dev is now python-osso-dev
+  * python-osso-dev Depends changes:
+    - python2.5-osso -> python-osso
+  * Modify p_base and p_dev in debian/rules to python-osso and
+    python-osso-dev, respectively.
 
- -- Luciano Miguel Wolf <luciano.wolf@indt.org.br>  Mon, 25 Jun 2007 16:34:30 -0300
+ -- Bruno dos Santos de Araujo <bruno.araujo@indt.org.br>  Wed, 19 Nov 2008 13:58:39 -0400
+
+python-osso (0.3-1osso4) unstable; urgency=low
+
+  * Adding alarmd.py from Gene Cash
+  * Fix in AutoSave (None as default argument)
+  * Fix parameter order in DeviceState.set_device_state_cb
+  * Fix default parameter in DeviceState.set_device_state_cb
+  * Added examples from bora to -dev package 
+
+ -- Lauro Moura Maranhao Neto <lauro.neto@openbossa.org>  Fri, 28 Dec 2007 17:50:29 -0300
+
+python-osso (0.3-1osso3) unstable; urgency=low
+
+  * Fixed __init__.py - Do not import help module.
+
+ -- Lauro Moura Neto <lauro.neto@openbossa.org>  Fri, 26 Oct 2007 14:45:41 -0300
+
+python-osso (0.3-1osso2) unstable; urgency=low
+
+  * mime and ic modules removed 
+
+ -- Luciano Miguel Wolf <luciano.wolf@indt.org.br>  Thu,  2 Aug 2007 10:33:13 -0300
+
+python-osso (0.3-1osso1) unstable; urgency=low
+
+  * support to cairo
+
+ -- Luciano Miguel Wolf <luciano.wolf@indt.org.br>  Wed, 30 May 2007 15:40:24 -0300
 
 python-osso (0.2-1osso3) unstable; urgency=low
 

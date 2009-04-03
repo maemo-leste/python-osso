@@ -183,6 +183,7 @@ initdevice_state(void)
 	PyModule_AddObject(module, "DeviceState", (PyObject *)&DeviceStateType);
 
 	_load_exceptions();
+
 	/* add contants */
 	/* : */
 	/* : */
@@ -271,7 +272,7 @@ Context_set_device_state_callback(Context *self, PyObject *args, PyObject *kwds)
 		Py_XDECREF(device_state_callback);
 		device_state_callback = NULL;
 	}
-	
+
 	hw_state.shutdown_ind = shutdown;
 	hw_state.save_unsaved_data_ind = save_data;
 	hw_state.memory_low_ind = memory_low;

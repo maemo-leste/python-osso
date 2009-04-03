@@ -1,5 +1,5 @@
 /**
- * osso-helplib.c
+ * osso-locale.c
  * Python bindings for libosso components.
  *
  * Copyright (C) 2005-2007 INdT - Instituto Nokia de Tecnologia
@@ -24,15 +24,14 @@
 
 #include "osso.h"
 
-static PyTypeObject *_PyGtkDialog_Type;
-#define PyGtkDialog_Type (*_PyGtkDialog_Type)
+static PyObject *set_locale_callback = NULL;
 
 /* ----------------------------------------------- */
-/* Help type default methods                       */
+/* Context type default methods                    */
 /* ----------------------------------------------- */
 
 PyObject *
-Help_new(PyTypeObject *type, PyObject *args, PyObject *kwds)
+Locale_new(PyTypeObject *type, PyObject *args, PyObject *kwds)
 {
 	Context *self;
 
@@ -46,8 +45,8 @@ Help_new(PyTypeObject *type, PyObject *args, PyObject *kwds)
 
 
 int
-Help_init(Context *self, PyObject *args, PyObject *kwds)
-{	
+Locale_init(Context *self, PyObject *args, PyObject *kwds)
+{
 	PyObject *ossocontext = NULL;
 	Context *fullcontext = NULL;
 	
@@ -67,7 +66,7 @@ Help_init(Context *self, PyObject *args, PyObject *kwds)
 
 
 PyObject *
-Help_close(Context *self)
+Locale_close(Context *self)
 {
 	if (!_check_context(self->context)) return 0;
 	self->context = NULL;
@@ -76,7 +75,7 @@ Help_close(Context *self)
 
 
 void
-Help_dealloc(Context *self)
+Locale_dealloc(Context *self)
 {
 	if (self->context == NULL)
 		return;
@@ -86,24 +85,31 @@ Help_dealloc(Context *self)
 }
 
 
-static struct PyMethodDef Help_methods[] = {
-	/* Help */
-	{"show", (PyCFunction)Context_help_show, METH_VARARGS | METH_KEYWORDS,
-		"Fill in later!\n"},
-	{"dialog_help_enable", (PyCFunction)Context_help_dialog_help_enable, METH_VARARGS | METH_KEYWORDS,
-		"Fill in later!\n"},
+static struct PyMethodDef Locale_methods[] = {
+	/* Locale */
+	{"set_locale_notification_callback", (PyCFunction)Context_set_locale_notification_callback, METH_VARARGS | METH_KEYWORDS,
+		"locale.set_locale_notification_callback(callback[, user_data])\n\n"
+		"This function registers a callback that is called whenever the locale is\n"
+		"changed.\n"
+		"Use None in callback parameter to unset this callback. The callback\n"
+		"will receive the parameters: new_locale, user_data.\n"},
+	{"set_locale", (PyCFunction)Context_set_locale, METH_VARARGS,
+		"locale.set_locale(new_locale) \n\n"
+		"This function issues a notification over the D-Bus system bus indicating\n"
+		"a change of locale. To receive such a notification, install a callback\n"
+		"function with set_locale_notification_callback.\n"},
 	/* Default */
-	{"close", (PyCFunction)Help_close, METH_NOARGS, "Close help context."},
+	{"close", (PyCFunction)Locale_close, METH_NOARGS, "Close Locale context."},
 	{0, 0, 0, 0}
 };
 
-static PyTypeObject HelpType = {
+static PyTypeObject LocaleType = {
 	PyObject_HEAD_INIT(NULL)
 	0,																/* ob_size */
-	"osso.Help",													/* tp_name */
+	"osso.Locale",													/* tp_name */
 	sizeof(Context),												/* tp_basicsize */
 	0,																/* tp_itemsize */
-	(destructor)Help_dealloc,										/* tp_dealloc */
+	(destructor)Locale_dealloc,										/* tp_dealloc */
 	0,																/* tp_print */
 	0,																/* tp_getattr */
 	0,																/* tp_setattr */
@@ -119,14 +125,14 @@ static PyTypeObject HelpType = {
 	0,																/* tp_setattro */
 	0,																/* tp_as_buffer */
 	Py_TPFLAGS_DEFAULT|Py_TPFLAGS_CHECKTYPES|Py_TPFLAGS_BASETYPE,	/* tp_flags */
-	"OSSO Help class",												/* tp_doc */
+	"OSSO Locale class",											/* tp_doc */
 	0,																/* tp_traverse */
 	0,																/* tp_clear */
 	0,																/* tp_richcompare */
 	0,																/* tp_weaklistoffset */
 	0,																/* tp_iter */
 	0,																/* tp_iternext */
-	Help_methods,													/* tp_methods */
+	Locale_methods,													/* tp_methods */
 	0,																/* tp_members */
 	0,																/* tp_getset */
 	0,																/* tp_base */
@@ -134,9 +140,9 @@ static PyTypeObject HelpType = {
 	0,																/* tp_descr_get */
 	0,																/* tp_descr_set */
 	0,																/* tp_dictoffset */
-	(initproc)Help_init,											/* tp_init */
+	(initproc)Locale_init,											/* tp_init */
 	0,																/* tp_alloc */
-	Help_new,														/* tp_new */
+	Locale_new,														/* tp_new */
 };
 
 static struct PyMethodDef osso_methods[] = {
@@ -144,90 +150,113 @@ static struct PyMethodDef osso_methods[] = {
 };
 
 PyMODINIT_FUNC
-inithelp(void)
+initlocale(void)
 {
 	PyObject *module;
 
 	/* prepare types */
-	HelpType.tp_new = PyType_GenericNew;
-	if (PyType_Ready(&HelpType) < 0) {
+	LocaleType.tp_new = PyType_GenericNew;
+	if (PyType_Ready(&LocaleType) < 0) {
 		return;
 	}
 
 	/* initialize module */
-	module = Py_InitModule3("help", osso_methods,
-			"FIXME: put documentation about Help module.");
+	module = Py_InitModule3("locale", osso_methods,
+			"FIXME: put documentation about Locale module.");
 
 	/* add types */
-	Py_INCREF(&HelpType);
-	PyModule_AddObject(module, "Help", (PyObject *)&HelpType);
+	Py_INCREF(&LocaleType);
+	PyModule_AddObject(module, "Locale", (PyObject *)&LocaleType);
 
-	_load_exceptions();
 	/* add contants */
 	/* : */
 	/* : */
 	/* : */
 }
 
-PyObject *
-Context_help_show(Context *self, PyObject *args, PyObject *kwds){
-	char *topic_id;
-	int flags;
-	osso_return_t ret;
+static void
+_wrap_locale_callback_handler(const char *new_locale, void *data)
+{
+	PyObject *py_args = NULL;
+	PyObject *py_ret = NULL;
+	PyGILState_STATE state;
 
-	static char *kwlist[] = { "topic_id", "flags", 0 };
+	state = PyGILState_Ensure();
 
-	if (!_check_context(self->context)) return 0;
-
-	if (!PyArg_ParseTupleAndKeywords(args, kwds, "sI:Context.help_show",
-				kwlist, &topic_id, &flags))
-	{
-		return NULL;
+	if (set_locale_callback == NULL) {
+		return;
 	}
 
-	ret = ossohelp_show(self->context, topic_id, flags);
-	if (ret != OSSO_OK) {
-		_set_exception(ret, NULL);
-		return NULL;
+	py_args = Py_BuildValue("(sO)", new_locale, data);
+	py_ret = PyEval_CallObject(set_locale_callback, py_args);
+
+	if (py_ret == NULL) {
+		PyGILState_Release(state);
+		return;
 	}
 
-	Py_RETURN_NONE;
+	PyGILState_Release(state);
 }
 
 PyObject *
-Context_help_dialog_help_enable(Context *self, PyObject *args, PyObject *kwds){
-	PyGObject *dialog;
-	PyObject *module;
-	char *topic_id = NULL;
+Context_set_locale_notification_callback(Context *self, PyObject *args, PyObject *kwds)
+{
+	PyObject *py_func = NULL;
+	PyObject *py_data = NULL;
 	osso_return_t ret;
 
-	static char *kwlist[] = { "dialog", "topic_id", 0 };
+	static char *kwlist[] = { "py_func", "py_data", 0};
+	if (!_check_context(self->context)) return 0;
+
+	if (!PyArg_ParseTupleAndKeywords(args, kwds, "O|O:Context.locale_set_notification_callback",
+				kwlist, &py_func, &py_data)) {
+		return ossoret_to_pyobj(OSSO_INVALID);
+	}
+
+	if (py_data == NULL)
+		py_data = Py_None;
+	if (py_func != Py_None) {
+		if (!PyCallable_Check(py_func)) {
+			PyErr_SetString(PyExc_TypeError, "callback parameter must be callable");
+			return ossoret_to_pyobj(OSSO_INVALID);
+		}
+		Py_XINCREF(py_func);
+		Py_XDECREF(set_locale_callback);
+		set_locale_callback = py_func;
+	} else {
+		Py_XDECREF(set_locale_callback);
+		set_locale_callback = NULL;
+	}
+
+	ret = osso_locale_change_set_notification_cb(self->context, _wrap_locale_callback_handler, py_data);
+
+	if (ret != OSSO_OK) {
+		_set_exception(ret, NULL);
+		return ossoret_to_pyobj(ret);
+	}
+
+	return ossoret_to_pyobj(OSSO_OK);
+}
+
+
+PyObject *
+Context_set_locale(Context *self, PyObject *args)
+{
+	char *new_locale = NULL;
+	osso_return_t ret;
 
 	if (!_check_context(self->context)) return 0;
 
-    if ((module = PyImport_ImportModule("gtk")) != NULL) {
-		_PyGtkDialog_Type = (PyTypeObject *)PyObject_GetAttrString(module, "Dialog");
-		if (_PyGtkDialog_Type == NULL) {
-			PyErr_SetString(PyExc_ImportError, "cannot import name Dialog from gtk");
-			return NULL;
-		}
-    } else {
-        PyErr_SetString(PyExc_ImportError, "could not import gtk");
-        return NULL;
-    }
-					
-	if (!PyArg_ParseTupleAndKeywords(args, kwds, "O!|s:Context.help_dialog_help_enable",
-				kwlist, &PyGtkDialog_Type, &dialog, &topic_id))
-	{
-		return NULL;
+	if (!PyArg_ParseTuple(args, "s:Context.locale_set", &new_locale)) {
+		return ossoret_to_pyobj(OSSO_INVALID);
 	}
 
-	ret = ossohelp_dialog_help_enable(GTK_DIALOG(dialog->obj), topic_id, self->context);
-	if (ret==FALSE) {
-		Py_RETURN_FALSE;
+	ret = osso_locale_set(self->context, new_locale);
+	if (ret != OSSO_OK) {
+		_set_exception(ret, NULL);
+		return PyInt_FromLong(ret);
 	}
-
-	Py_RETURN_TRUE;
+	return ossoret_to_pyobj(OSSO_OK);
 }
 
 /* vim:ts=4:noet:sw=4:sws=4:si:ai:showmatch:foldmethod=indent

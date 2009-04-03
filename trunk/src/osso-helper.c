@@ -54,6 +54,7 @@ _set_exception(osso_return_t err, osso_rpc_t *retval)
 		case OSSO_ERROR_NAME:
 			PyErr_SetString(OssoNameException, ((err_msg != NULL) ? err_msg : "Invalid name."));
 			break;
+			break;
 		case OSSO_ERROR_NO_STATE:
 			PyErr_SetString(OssoNoStateException, "No state file found to read.");
 			break;
@@ -218,6 +219,28 @@ void _load_exceptions(void)
 						"Cannot import osso.exceptions module");
 		return;
 	}
+}
+
+PyObject *
+ossoret_to_pyobj(osso_return_t osso_ret)
+{
+	switch (osso_ret) {
+		case OSSO_ERROR:
+			return PyString_FromString("OSSO_ERROR");
+		case OSSO_INVALID:
+			return PyString_FromString("OSSO_INVALID");
+		case OSSO_OK:
+			return PyString_FromString("OSSO_OK");
+		case OSSO_RPC_ERROR:
+			return PyString_FromString("OSSO_RPC_ERROR");
+		case OSSO_ERROR_NAME:
+			return PyString_FromString("OSSO_ERROR_NAME");
+		case OSSO_ERROR_NO_STATE:
+			return PyString_FromString("OSSO_ERROR_NO_STATE");
+		case OSSO_ERROR_STATE_SIZE:
+			return PyString_FromString("OSSO_ERROR_STATE_SIZE");
+	}
+	return NULL;
 }
 
 /* vim:ts=4:noet:sw=4:sws=4:si:ai:showmatch:foldmethod=indent

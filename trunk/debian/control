@@ -1,17 +1,17 @@
 Source: python-osso
 Priority: optional
 Section: python
-Maintainer: Osvaldo Santana Neto <osvaldo.santana@indt.org.br>
-Build-Depends: debhelper (>= 4.0.0), python2.5-gtk2-dev (>= 2.10.3-1osso4), python2.5-dev (>= 2.5.1-1osso2), libdbus-glib-1-dev, libosso-dev, libgtk2.0-dev, libpango1.0-dev, libglib2.0-dev
+Maintainer: PyMaemo Team <pymaemo-developers@garage.maemo.org>
+Build-Depends: debhelper (>= 4.0.0), python-gtk2-dev, python-all-dev, libdbus-glib-1-dev, libosso-dev, libgtk2.0-dev, libpango1.0-dev, libglib2.0-dev
 Standards-Version: 3.6.1
 
-Package: python2.5-osso
+Package: python-osso
 Architecture: any
-Depends: python2.5-gtk2 (>= 2.10.3-1osso4), python2.5 (>= 2.5.1-1osso2), libdbus-glib-1-2, libosso1, libgtk2.0-0, libpango1.0-0, libglib2.0-0, ${shlibs:Depends}
+Depends: python-gtk2, python-all, libdbus-glib-1-2, libosso1, libgtk2.0-0, libpango1.0-0, libglib2.0-0, ${shlibs:Depends}
 Description: Python bindings for Libosso library
 
-Package: python2.5-osso-dev
+Package: python-osso-dev
 Architecture: all
-Depends: python2.5-osso (= ${Source-Version})
+Depends: python-osso (>= ${source:Version})
 Description: Examples and header files for Python bindings for Libosso library
 

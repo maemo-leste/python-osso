@@ -177,6 +177,7 @@ initautosave(void)
 	PyModule_AddObject(module, "Autosave", (PyObject *)&AutosaveType);
 
 	_load_exceptions();
+
 	/* add contants */
 	/* : */
 	/* : */
@@ -207,7 +208,7 @@ PyObject *
 Context_set_autosave_callback(Context *self, PyObject *args, PyObject *kwds)
 {
 	PyObject *py_func = NULL;
-	PyObject *py_data = Py_None;
+	PyObject *py_data = NULL;
 	osso_return_t ret;
 
 	static char *kwlist[] = { "callback", "user_data", 0 };
@@ -233,8 +234,12 @@ Context_set_autosave_callback(Context *self, PyObject *args, PyObject *kwds)
 		autosave_callback = NULL;
 	}
 
+    if (py_data == NULL) {
+        py_data = Py_None;
+        Py_INCREF(py_data);
+    }
+
 	if (autosave_callback != NULL) {
-		Py_INCREF(py_data);
 		ret = osso_application_set_autosave_cb(self->context,
 				_wrap_autosave_callback_handler, py_data);
 	} else {

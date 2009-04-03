@@ -18,10 +18,10 @@ common_include_dirs = ['/usr/include',
                        '/usr/include/glib-2.0', '/usr/lib/glib-2.0/include',
                        '/usr/include/pygtk-2.0',
                        '/usr/include/gtk-2.0', '/usr/lib/gtk-2.0/include',
-                       '/usr/include/pango-1.0']
+                       '/usr/include/pango-1.0', '/usr/include/cairo']
 
 common_libraries = ['osso',
-                    'ossohelp',
+                    #'ossohelp',
                     'atk-1.0',
                     'dbus-1',
                     'glib-2.0',
@@ -30,15 +30,15 @@ common_libraries = ['osso',
 
 mime_include_dirs = ['/usr/include/gnome-vfs-2.0']
 
-osso_ic_libraries = ['osso-ic']
-mime_libraries = ['ossomime']
+#osso_ic_libraries = ['osso-ic']
+#mime_libraries = ['ossomime']
 
 #Modules to be built
 osso_modules = [ Extension('exceptions', sources = ['src/osso-exceptions.c'],
                             libraries = common_libraries,
                             include_dirs = common_include_dirs,
                             extra_compile_args = common_compile_args),
-                Extension('application', sources = ['src/osso-application.c', 'src/osso-helper.c'],
+                 Extension('application', sources = ['src/osso-application.c', 'src/osso-helper.c'],
                             libraries = common_libraries,
                             include_dirs = common_include_dirs,
                             extra_compile_args = common_compile_args),
@@ -54,22 +54,14 @@ osso_modules = [ Extension('exceptions', sources = ['src/osso-exceptions.c'],
                             libraries = common_libraries,
                             include_dirs = common_include_dirs,
                             extra_compile_args = common_compile_args),
-                 Extension('help', sources = ['src/osso-helplib.c', 'src/osso-helper.c'],
-                            libraries = common_libraries,
+                 Extension('locale', sources = ['src/osso-locale.c', 'src/osso-helper.c'],
+                            libraries = common_libraries,# + osso_ic_libraries,
                             include_dirs = common_include_dirs,
                             extra_compile_args = common_compile_args),
-                 Extension('ic._ic', sources = ['src/osso-ic.c', 'src/osso-helper.c'],
-                            libraries = common_libraries + osso_ic_libraries,
-                            include_dirs = common_include_dirs,
-                            extra_compile_args = common_compile_args),
-                 Extension('ic.constants', sources = ['src/osso-ic-constants.c'],
-                            libraries = common_libraries + osso_ic_libraries,
-                            include_dirs = common_include_dirs,
-                            extra_compile_args = common_compile_args),
-                 Extension('mime', sources = ['src/osso-mime.c', 'src/osso-helper.c'],
-                            libraries = common_libraries + mime_libraries,
-                            include_dirs = common_include_dirs + mime_include_dirs,
-                            extra_compile_args = common_compile_args),
+#                 Extension('mime', sources = ['src/osso-mime.c', 'src/osso-helper.c'],
+#                            libraries = common_libraries + mime_libraries,
+#                            include_dirs = common_include_dirs + mime_include_dirs,
+#                            extra_compile_args = common_compile_args),
                  Extension('misc', sources = ['src/osso-misc.c', 'src/osso-helper.c'],
                             libraries = common_libraries,
                             include_dirs = common_include_dirs,
@@ -98,7 +90,7 @@ osso_modules = [ Extension('exceptions', sources = ['src/osso-exceptions.c'],
                             libraries = common_libraries,
                             include_dirs = common_include_dirs,
                             extra_compile_args = common_compile_args),
-              ]
+               ]
 
 setup(
         name = 'osso',
@@ -107,7 +99,7 @@ setup(
         author = 'Osvaldo Santana Neto',
         author_email = 'osvaldo.santana@indt.org.br',
         url = 'http://www.maemo.org',
-        py_modules=["osso/__init__", "osso/ic/__init__", "osso/alarmd"],
+        py_modules=["osso/__init__", "osso/alarmd"],
         ext_package = 'osso',
         ext_modules = osso_modules
 )

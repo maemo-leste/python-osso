@@ -162,6 +162,7 @@ initapplication(void)
 	PyModule_AddObject(module, "Application", (PyObject *)&ApplicationType);
 
 	_load_exceptions();
+
 	/* add contants */
 	/* : */
 	/* : */

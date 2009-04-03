@@ -33,12 +33,13 @@ from exceptions import OssoStateSizeException
 from application import Application
 from autosave import Autosave
 from device_state import DeviceState
-from help import Help
-from mime import Mime
+#from help import Help
+from locale import Locale
+#from mime import Mime
 from plugin import Plugin
 from rpc import Rpc
 from state_saving import StateSaving
 from statusbar import Statusbar
 from system_note import SystemNote
 from time_notification import TimeNotification
-import ic
+#import ic

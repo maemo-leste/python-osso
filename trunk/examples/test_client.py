@@ -4,6 +4,9 @@ import gtk
 import hildon
 import osso
 
+def locale_cb(new_locale, user_data):
+    print "Locale: %s / User: %s"%(new_locale, user_data)
+
 def handler_test(interface, method, parameters, args):
     print "CALLBACK handler_test with interface[",interface,"] method[",method,"] parameters[",parameters,"] args[",args,"]"
 
@@ -14,6 +17,11 @@ def handler_test_application_top(widget, applic, as):
 def handler_test_force_autosave(widget, as):
     print widget.get_label() 
     as.force_autosave()
+
+def handler_test_locale(widget, local):
+    print widget.get_label()
+    local.set_locale_notification_callback(locale_cb, "Send some user data!")
+    print local.set_locale("en_GB")
 
 def handler_test_set_handler(widget, rpc):
     print widget.get_label()
@@ -72,6 +80,8 @@ timenot.set_time(time.localtime())
 plug = osso.Plugin(c)
 ss = osso.StateSaving(c)
 
+local = osso.Locale(c)
+
 # Interface
 app = hildon.App()
 view = hildon.AppView("Client")
@@ -91,6 +101,10 @@ vbox.add(test_application_top)
 test_force_autosave = gtk.Button("Force Autosave")
 test_force_autosave.connect("clicked", handler_test_force_autosave, as)
 vbox.add(test_force_autosave)
+
+test_locale = gtk.Button("Set Locale")
+test_locale.connect("clicked", handler_test_locale, local)
+vbox.add(test_locale)
 
 test_unset_handler = gtk.Button("Unset Handler")
 test_unset_handler.connect("clicked", handler_test_unset_handler, rpc)
