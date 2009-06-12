@@ -1,3 +1,11 @@
+python-osso (0.3-2maemo4) unstable; urgency=low
+
+  * Remove hardcoded 'site-packages' paths allowing install without
+    problems in either python2.5 ou python2.6
+  * Use "pyversions -vd" instead of a fixed Python version in debian/rules
+
+ -- Bruno dos Santos de Araujo <bruno.araujo@indt.org.br>  Tue,  9 Jun 2009 15:49:08 -0400
+
 python-osso (0.3-2maemo3) unstable; urgency=low
 
   * Put the pymaemo-developers mailing list address in "Maintainer" field.
