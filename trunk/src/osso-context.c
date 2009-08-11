@@ -47,17 +47,15 @@ Context_init(Context *self, PyObject *args, PyObject *kwds)
 {
 	char *application;
 	char *version;
-	char activation;
+	PyObject *py_activation;
 
 	static char *kwlist[] = { "application", "version", "activation", 0 };
 
-	if (!PyArg_ParseTupleAndKeywords(args, kwds, "ssi", kwlist,
-				&application, &version, &activation)) {
+	if (!PyArg_ParseTupleAndKeywords(args, kwds, "ssO!", kwlist,
+				&application, &version, &PyBool_Type, &py_activation)) {
 		return -1;
 	}
-	
-	self->context = osso_initialize(application, version, activation, 0);
-
+	self->context = osso_initialize(application, version, (py_activation == Py_True), 0);
 	if (self->context == NULL) {
 		PyErr_SetString(OssoException, "Cannot initialize context.");
 		return -1;
