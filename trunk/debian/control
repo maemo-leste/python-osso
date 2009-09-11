@@ -7,11 +7,13 @@ Standards-Version: 3.6.1
 
 Package: python-osso
 Architecture: any
+Provides: python2.5-osso
 Depends: python-gtk2, python-all, libdbus-glib-1-2, libosso1, libgtk2.0-0, libpango1.0-0, libglib2.0-0, ${shlibs:Depends}
 Description: Python bindings for Libosso library
 
 Package: python-osso-dev
 Architecture: all
+Provides: python2.5-osso-dev
 Depends: python-osso (>= ${source:Version})
 Description: Examples and header files for Python bindings for Libosso library
 
