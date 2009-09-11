@@ -1,3 +1,10 @@
+python-osso (0.3-2maemo5) unstable; urgency=low
+
+  * debian/control:
+    - Add Provides/Replaces keyword for python2.5-osso (Fixes: #4977)
+
+ -- Bruno dos Santos de Araujo <bruno.araujo@indt.org.br>  Fri, 11 Sep 2009 08:38:20 -0400
+
 python-osso (0.3-2maemo4) unstable; urgency=low
 
   * Remove hardcoded 'site-packages' paths allowing install without
