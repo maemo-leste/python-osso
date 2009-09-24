@@ -1,0 +1,81 @@
+#!/usr/bin/make -f
+
+PYVER=$(shell pyversions -vd)
+
+DEB_HOST_GNU_TYPE   ?= $(shell dpkg-architecture -qDEB_HOST_GNU_TYPE)
+DEB_BUILD_GNU_TYPE  ?= $(shell dpkg-architecture -qDEB_BUILD_GNU_TYPE)
+
+p_base=python-osso
+p_dev=python-osso-dev
+
+d=debian/tmp
+d_base=debian/$(p_base)
+d_dev=debian/$(p_dev)
+
+ifeq ($(DEB_BUILD_ARCH),armel)
+    CFLAGS=-Os -mthumb -mfloat-abi=softfp -Wall -Wstrict-prototypes
+else
+    CFLAGS=-Os -Wall -Wstrict-prototypes
+endif
+
+build: build-stamp
+build-stamp:
+	dh_testdir
+	CFLAGS="$(CFLAGS)" python$(PYVER) setup.py build
+	touch build-stamp
+
+clean:
+	dh_testdir
+	dh_testroot
+	rm -f build-stamp 
+	python$(PYVER) setup.py clean
+	-rm -rf $(d_base) $(d_dev)
+	-rm -rf build
+	dh_clean 
+
+install: build
+	dh_testdir
+	dh_testroot
+	dh_clean -k 
+	dh_installdirs
+
+	mkdir -p $(d)/usr
+	python$(PYVER) setup.py install --prefix=$(d)/usr
+	python$(PYVER) -OO -m compileall -d / -l $(d)/usr/lib/python$(PYVER)/*-packages/osso
+
+	# base
+	mkdir -p $(d_base)/usr
+	rm -f $(d)/usr/lib/python$(PYVER)/{site,dist}-packages/osso/*.py
+	rm -f $(d)/usr/lib/python$(PYVER)/{site,dist}-packages/osso/*.pyc
+
+	mv $(d)/usr/lib $(d_base)/usr
+
+	# dev
+	mkdir -p $(d_dev)/usr/include/python-osso
+	cp src/osso.h $(d_dev)/usr/include/python-osso
+	mkdir -p $(d_dev)/usr/share/doc/$(p_dev)
+	cp examples/test_*.{py,desktop,service} $(d_dev)/usr/share/doc/$(p_dev)
+	cp examples/alarm.py $(d_dev)/usr/share/doc/$(p_dev)
+	cp -R examples/{application,autosave,device-state,plugin,rpc,statesaving,statusbar,systemnote,timenotification} $(d_dev)/usr/share/doc/$(p_dev)
+	cp examples/install_dev_env.sh $(d_dev)/usr/share/doc/$(p_dev)
+
+	# finish
+	find $(d_base) $(d_dev) -name ".svn" | xargs rm -rf
+
+binary-indep: build install
+binary-arch: build install
+	dh_testdir
+	dh_testroot
+	dh_installman
+	dh_link
+	dh_strip
+	dh_fixperms
+	dh_makeshlibs
+	dh_installdeb
+	dh_shlibdeps
+	dh_md5sums
+	dh_gencontrol
+	dh_builddeb
+
+binary: binary-indep binary-arch
+.PHONY: build clean binary-indep binary-arch binary install 
