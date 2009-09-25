@@ -31,6 +31,7 @@ clean:
 	python$(PYVER) setup.py clean
 	-rm -rf $(d_base) $(d_dev)
 	-rm -rf build
+	-rm -f osso/*.py[co]
 	dh_clean 
 
 install: build

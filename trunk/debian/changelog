@@ -1,3 +1,10 @@
+python-osso (0.3-2maemo6) unstable; urgency=low
+
+  * osso.h: add missing _load_exceptions() prototype.
+  * debian/rules: also remove .py[co] files on cleanup.
+
+ -- Anderson Lizardo <anderson.lizardo@indt.org.br>  Fri, 25 Sep 2009 09:18:58 -0400
+
 python-osso (0.3-2maemo5) unstable; urgency=low
 
   * debian/control:
