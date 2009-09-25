@@ -1,9 +1,13 @@
 python-osso (0.3-2maemo6) unstable; urgency=low
 
+  [ Bruno dos Santos de Araujo ]
+  * Use CDBS for packaging.
+  
+  [ Anderson Lizardo ]
   * osso.h: add missing _load_exceptions() prototype.
   * debian/rules: also remove .py[co] files on cleanup.
 
- -- Anderson Lizardo <anderson.lizardo@indt.org.br>  Fri, 25 Sep 2009 09:18:58 -0400
+ -- Bruno dos Santos de Araujo <bruno.araujo@indt.org.br>  Fri, 25 Sep 2009 11:35:03 -0400
 
 python-osso (0.3-2maemo5) unstable; urgency=low
 
