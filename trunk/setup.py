@@ -1,105 +1,26 @@
-from distutils.core import setup, Extension
+from distutils.core import setup
+from distutils.extension import Extension
+from subprocess import Popen, PIPE
+import glob
 
-#Common attributes to be used by Extension
-common_compile_args = ['-Os',
-#                       '-ansi',
-                       '-DXTHREADS',
-                       '-DXUSE_MTSAFE_API',
-                       '-DGTK_DISABLE_DEPRECATED',
-#                       '-pedantic',
-#                       '-Wno-long-long',
-#                       '-g',
-#                       '-rdynamic',
-                      ]
+from Cython.Distutils import build_ext
 
-common_include_dirs = ['/usr/include',
-                       '/usr/include/atk-1.0',
-                       '/usr/include/dbus-1.0', '/usr/lib/dbus-1.0/include',
-                       '/usr/include/glib-2.0', '/usr/lib/glib-2.0/include',
-                       '/usr/include/pygtk-2.0',
-                       '/usr/include/gtk-2.0', '/usr/lib/gtk-2.0/include',
-                       '/usr/include/pango-1.0', '/usr/include/cairo']
+# Based on snippet from http://code.activestate.com/recipes/502261/
+def pkgconfig(*packages, **kw):
+    flag_map = {'-I': 'include_dirs', '-L': 'library_dirs', '-l': 'libraries'}
+    command = Popen(["pkg-config", "--libs", "--cflags"] + list(packages), stdout=PIPE)
+    for token in command.communicate()[0].split():
+        kw.setdefault(flag_map.get(token[:2]), []).append(token[2:])
+    kw["extra_compile_args"] = ["-Werror"]
+    return kw
 
-common_libraries = ['osso',
-                    #'ossohelp',
-                    'atk-1.0',
-                    'dbus-1',
-                    'glib-2.0',
-                    'gtk-x11-2.0',
-                    'pango-1.0']
+extensions = []
+for pyx in glob.glob("osso/*.pyx"):
+    ext_name = pyx[:-4].replace('/', '.')
+    extensions.append(Extension(ext_name, [pyx], **pkgconfig("libosso")))
 
-mime_include_dirs = ['/usr/include/gnome-vfs-2.0']
-
-#osso_ic_libraries = ['osso-ic']
-#mime_libraries = ['ossomime']
-
-#Modules to be built
-osso_modules = [ Extension('exceptions', sources = ['src/osso-exceptions.c'],
-                            libraries = common_libraries,
-                            include_dirs = common_include_dirs,
-                            extra_compile_args = common_compile_args),
-                 Extension('application', sources = ['src/osso-application.c', 'src/osso-helper.c'],
-                            libraries = common_libraries,
-                            include_dirs = common_include_dirs,
-                            extra_compile_args = common_compile_args),
-                 Extension('autosave', sources = ['src/osso-autosave.c', 'src/osso-helper.c'],
-                            libraries = common_libraries,
-                            include_dirs = common_include_dirs,
-                            extra_compile_args = common_compile_args),
-                 Extension('context', sources = ['src/osso-context.c', 'src/osso-helper.c'],
-                            libraries = common_libraries,
-                            include_dirs = common_include_dirs,
-                            extra_compile_args = common_compile_args),
-                 Extension('device_state', sources = ['src/osso-device-state.c', 'src/osso-helper.c'],
-                            libraries = common_libraries,
-                            include_dirs = common_include_dirs,
-                            extra_compile_args = common_compile_args),
-                 Extension('locale', sources = ['src/osso-locale.c', 'src/osso-helper.c'],
-                            libraries = common_libraries,# + osso_ic_libraries,
-                            include_dirs = common_include_dirs,
-                            extra_compile_args = common_compile_args),
-#                 Extension('mime', sources = ['src/osso-mime.c', 'src/osso-helper.c'],
-#                            libraries = common_libraries + mime_libraries,
-#                            include_dirs = common_include_dirs + mime_include_dirs,
-#                            extra_compile_args = common_compile_args),
-                 Extension('misc', sources = ['src/osso-misc.c', 'src/osso-helper.c'],
-                            libraries = common_libraries,
-                            include_dirs = common_include_dirs,
-                            extra_compile_args = common_compile_args),
-                 Extension('plugin', sources = ['src/osso-plugin.c', 'src/osso-helper.c'],
-                            libraries = common_libraries,
-                            include_dirs = common_include_dirs,
-                            extra_compile_args = common_compile_args),
-                 Extension('rpc', sources = ['src/osso-rpc.c', 'src/osso-helper.c'],
-                            libraries = common_libraries,
-                            include_dirs = common_include_dirs,
-                            extra_compile_args = common_compile_args),
-                 Extension('state_saving', sources = ['src/osso-state-saving.c', 'src/osso-helper.c'],
-                            libraries = common_libraries,
-                            include_dirs = common_include_dirs,
-                            extra_compile_args = common_compile_args),
-                 Extension('statusbar', sources = ['src/osso-statusbar.c', 'src/osso-helper.c'],
-                            libraries = common_libraries,
-                            include_dirs = common_include_dirs,
-                            extra_compile_args = common_compile_args),
-                 Extension('system_note', sources = ['src/osso-system-note.c', 'src/osso-helper.c'],
-                            libraries = common_libraries,
-                            include_dirs = common_include_dirs,
-                            extra_compile_args = common_compile_args),
-                 Extension('time_notification', sources = ['src/osso-time-notification.c', 'src/osso-helper.c'],
-                            libraries = common_libraries,
-                            include_dirs = common_include_dirs,
-                            extra_compile_args = common_compile_args),
-               ]
-
-setup(
-        name = 'osso',
-        version = '0.1',
-        description = 'Python bindings for libosso components.',
-        author = 'Osvaldo Santana Neto',
-        author_email = 'osvaldo.santana@indt.org.br',
-        url = 'http://www.maemo.org',
-        py_modules=["osso/__init__", "osso/alarmd"],
-        ext_package = 'osso',
-        ext_modules = osso_modules
-)
+setup(name = "osso",
+      version = "0.4",
+      packages = ["osso"],
+      ext_modules = extensions,
+      cmdclass = {'build_ext': build_ext})

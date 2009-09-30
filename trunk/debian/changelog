@@ -1,3 +1,9 @@
+python-osso (0.4-0maemo1) unstable; urgency=low
+
+  * Rewrite using Cython.
+
+ -- Anderson Lizardo <anderson.lizardo@indt.org.br>  Fri, 25 Sep 2009 21:03:08 -0400
+
 python-osso (0.3-2maemo6) unstable; urgency=low
 
   [ Bruno dos Santos de Araujo ]
