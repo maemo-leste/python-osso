@@ -3,7 +3,7 @@ import osso
 
 class TestOssoApplication(unittest.TestCase):
     def setUp(self):
-        self.ctx = osso.Context("app", "0.1")
+        self.ctx = osso.Context("app", "0.1", False)
 
     def test_constructor(self):
         app = osso.Application(self.ctx)
