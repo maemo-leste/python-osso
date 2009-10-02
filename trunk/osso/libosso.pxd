@@ -15,6 +15,8 @@ cdef extern from "libosso.h":
         int type
         value value
 
+    ctypedef void osso_application_autosave_cb_f (void *data)
+    
     ctypedef void osso_rpc_argfill (DBusMessage *msg, void *data)
 
     ctypedef enum osso_return_t:
@@ -84,9 +86,22 @@ cdef extern from "libosso.h":
                                                   void *argfill_data)
 
     osso_return_t osso_system_note_dialog(osso_context_t *osso,
-		                          char *message,
-				          osso_system_note_type_t type,
-				          osso_rpc_t *retval)
+                                          char *message,
+                                          osso_system_note_type_t type,
+                                          osso_rpc_t *retval)
     osso_return_t osso_system_note_infoprint(osso_context_t *osso,
-		                             char *text,
-					     osso_rpc_t *retval)
+                                             char *text,
+                                             osso_rpc_t *retval)
+    osso_return_t osso_application_set_autosave_cb(osso_context_t * osso,
+                                                   osso_application_autosave_cb_f *cb,
+                                                   void *data)
+
+    osso_return_t osso_application_unset_autosave_cb(osso_context_t * osso,
+                                                     osso_application_autosave_cb_f *cb,
+                                                     void *data)
+
+    osso_return_t osso_application_userdata_changed(osso_context_t *osso)
+    osso_return_t osso_application_autosave_force(osso_context_t *osso)
+    char* osso_application_name_get (osso_context_t *osso)
+    char* osso_application_version_get (osso_context_t *osso)
+
