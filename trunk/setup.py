@@ -16,6 +16,8 @@ def pkgconfig(*packages, **kw):
 
 extensions = []
 for pyx in glob.glob("osso/*.pyx"):
+    if pyx == "osso/helper.pyx":
+        continue
     ext_name = pyx[:-4].replace('/', '.')
     extensions.append(Extension(ext_name, [pyx], **pkgconfig("libosso")))
 
