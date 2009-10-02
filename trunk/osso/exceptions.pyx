@@ -6,3 +6,6 @@ class OssoInvalidException(Exception):
 
 class OssoRPCException(Exception):
     """RPC Exception."""
+
+class OssoNoStateException(Exception):
+    """No state available."""

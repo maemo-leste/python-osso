@@ -1,7 +1,6 @@
 from libosso cimport osso_return_t, OSSO_OK, osso_application_set_autosave_cb, osso_application_userdata_changed, osso_application_autosave_force, osso_application_name_get, osso_application_version_get, osso_application_unset_autosave_cb
 from context cimport Context
-from exceptions import OssoException
-from collections import Callable
+from exceptions import OssoException, OssoNoStateException
 from traceback import print_exc
 
 cdef void _wrap_autosave_callback_wrapper(void *data) with gil:

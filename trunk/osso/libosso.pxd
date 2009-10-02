@@ -15,6 +15,10 @@ cdef extern from "libosso.h":
         int type
         value value
 
+    ctypedef struct osso_state_t:
+        unsigned int state_size
+        void *state_data
+
     ctypedef void osso_application_autosave_cb_f (void *data)
     
     ctypedef void osso_rpc_argfill (DBusMessage *msg, void *data)
@@ -24,6 +28,8 @@ cdef extern from "libosso.h":
         OSSO_ERROR
         OSSO_INVALID
         OSSO_RPC_ERROR
+        OSSO_ERROR_NO_STATE
+
 
     ctypedef enum osso_system_note_type_t:
         OSSO_GN_WARNING
@@ -105,3 +111,5 @@ cdef extern from "libosso.h":
     char* osso_application_name_get (osso_context_t *osso)
     char* osso_application_version_get (osso_context_t *osso)
 
+    osso_return_t osso_state_write (osso_context_t *osso, osso_state_t *state)
+    osso_return_t osso_state_read (osso_context_t *osso, osso_state_t *state)
