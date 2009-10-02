@@ -23,6 +23,12 @@ cdef extern from "libosso.h":
         OSSO_INVALID
         OSSO_RPC_ERROR
 
+    ctypedef enum osso_system_note_type_t:
+        OSSO_GN_WARNING
+        OSSO_GN_ERROR
+        OSSO_GN_NOTICE
+        OSSO_GN_WAIT
+
     osso_return_t osso_application_top(osso_context_t *osso,
                                        char *application,
                                        char *arguments)
@@ -75,4 +81,12 @@ cdef extern from "libosso.h":
                                                   osso_rpc_async_f *async_cb,
                                                   void *data,
                                                   osso_rpc_argfill *argfill,
-                                                  void *argfill_data)   
+                                                  void *argfill_data)
+
+    osso_return_t osso_system_note_dialog(osso_context_t *osso,
+		                          char *message,
+				          osso_system_note_type_t type,
+				          osso_rpc_t *retval)
+    osso_return_t osso_system_note_infoprint(osso_context_t *osso,
+		                             char *text,
+					     osso_rpc_t *retval)
