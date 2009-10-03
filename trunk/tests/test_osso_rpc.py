@@ -95,5 +95,11 @@ class TestOssoRpc(unittest.TestCase):
                           "org.maemo." + self.program,
                           123, "abc")
 
+    def test_get_set_timeout(self):
+        rpc = osso.Rpc(self.ctx)
+        rpc.set_rpc_timeout(100)
+        i = rpc.get_rpc_timeout()
+        self.assertEqual(i, 100)
+
 if __name__ == "__main__":
     unittest.main()

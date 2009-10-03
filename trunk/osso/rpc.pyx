@@ -3,7 +3,7 @@ from libglib cimport GArray, const_gchar
 from libdbus cimport DBusMessage, dbus_message_append_args
 from libdbus cimport DBUS_TYPE_STRING, DBUS_TYPE_UINT32, DBUS_TYPE_INT32, DBUS_TYPE_BOOLEAN, DBUS_TYPE_DOUBLE, DBUS_TYPE_STRING, DBUS_TYPE_INVALID
 from libosso cimport osso_return_t, osso_rpc_t, osso_rpc_run_system_with_argfill, osso_rpc_run_with_argfill, osso_rpc_set_cb_f, osso_rpc_unset_cb_f
-from libosso cimport osso_rpc_async_run_with_argfill
+from libosso cimport osso_rpc_async_run_with_argfill, osso_rpc_set_timeout, osso_rpc_get_timeout
 from libosso cimport OSSO_OK, OSSO_ERROR, OSSO_INVALID, OSSO_RPC_ERROR
 from context cimport Context
 from exceptions import OssoException, OssoInvalidException, OssoRPCException
@@ -109,3 +109,18 @@ cdef class Rpc:
             self.cb_data = None
         if ret != OSSO_OK:
             _set_exception(ret, NULL)
+
+    def set_rpc_timeout(self, int timeout):
+        cdef osso_return_t ret
+        ret = osso_rpc_set_timeout(self.ctx, timeout)
+        if ret != OSSO_OK:
+            _set_exception(ret, NULL)
+
+    def get_rpc_timeout(self):
+        cdef osso_return_t ret
+        cdef int timeout
+        ret = osso_rpc_get_timeout(self.ctx, &timeout)
+        if ret != OSSO_OK:
+             _set_exception(ret, NULL)
+        else:
+            return timeout

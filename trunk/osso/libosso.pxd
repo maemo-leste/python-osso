@@ -92,6 +92,9 @@ cdef extern from "libosso.h":
                                                   osso_rpc_argfill *argfill,
                                                   void *argfill_data)
 
+    osso_return_t osso_rpc_get_timeout(osso_context_t *osso, int *timeout)
+    osso_return_t osso_rpc_set_timeout(osso_context_t *osso, int timeout)
+
     osso_return_t osso_system_note_dialog(osso_context_t *osso,
                                           char *message,
                                           osso_system_note_type_t type,
