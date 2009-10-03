@@ -19,9 +19,9 @@ cdef extern from "libosso.h":
         unsigned int state_size
         void *state_data
 
-    ctypedef void osso_application_autosave_cb_f (void *data)
+    ctypedef void osso_application_autosave_cb_f(void *data)
     
-    ctypedef void osso_rpc_argfill (DBusMessage *msg, void *data)
+    ctypedef void osso_rpc_argfill(DBusMessage *msg, void *data)
 
     ctypedef enum osso_return_t:
         OSSO_OK
@@ -40,6 +40,7 @@ cdef extern from "libosso.h":
     osso_return_t osso_application_top(osso_context_t *osso,
                                        char *application,
                                        char *arguments)
+
     osso_context_t *osso_initialize(char *application,
                                     char *version,
                                     int activation,
@@ -98,18 +99,18 @@ cdef extern from "libosso.h":
     osso_return_t osso_system_note_infoprint(osso_context_t *osso,
                                              char *text,
                                              osso_rpc_t *retval)
-    osso_return_t osso_application_set_autosave_cb(osso_context_t * osso,
+
+    osso_return_t osso_application_set_autosave_cb(osso_context_t *osso,
                                                    osso_application_autosave_cb_f *cb,
                                                    void *data)
 
-    osso_return_t osso_application_unset_autosave_cb(osso_context_t * osso,
+    osso_return_t osso_application_unset_autosave_cb(osso_context_t *osso,
                                                      osso_application_autosave_cb_f *cb,
                                                      void *data)
-
     osso_return_t osso_application_userdata_changed(osso_context_t *osso)
     osso_return_t osso_application_autosave_force(osso_context_t *osso)
-    char* osso_application_name_get (osso_context_t *osso)
-    char* osso_application_version_get (osso_context_t *osso)
+    char *osso_application_name_get(osso_context_t *osso)
+    char *osso_application_version_get(osso_context_t *osso)
 
-    osso_return_t osso_state_write (osso_context_t *osso, osso_state_t *state)
-    osso_return_t osso_state_read (osso_context_t *osso, osso_state_t *state)
+    osso_return_t osso_state_write(osso_context_t *osso, osso_state_t *state)
+    osso_return_t osso_state_read(osso_context_t *osso, osso_state_t *state)
