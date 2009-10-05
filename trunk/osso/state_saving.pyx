@@ -1,5 +1,4 @@
-#TODO: evict RPC references when _set_exception is implemented in the proper place
-
+include "helper.pyx"
 from libosso cimport osso_return_t, osso_state_t, osso_rpc_t, OSSO_OK, OSSO_ERROR_NO_STATE, OSSO_ERROR, OSSO_INVALID, OSSO_RPC_ERROR, osso_state_write, osso_state_read
 from libdbus cimport DBUS_TYPE_STRING
 from context cimport Context

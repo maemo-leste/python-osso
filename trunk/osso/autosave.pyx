@@ -1,3 +1,4 @@
+include "helper.pyx"
 from libosso cimport osso_return_t, OSSO_OK, osso_application_set_autosave_cb, osso_application_userdata_changed, osso_application_autosave_force, osso_application_name_get, osso_application_version_get, osso_application_unset_autosave_cb
 from context cimport Context
 from exceptions import OssoException, OssoNoStateException
@@ -8,7 +9,7 @@ cdef void _wrap_autosave_callback_wrapper(void *data) with gil:
     try:
         autosave.cb_data[0](<object>autosave.cb_data[1])
     except:
-        print_exc() 
+        print_exc()
 
 cdef class Autosave:
     def __cinit__(self, Context context not None):
@@ -26,7 +27,7 @@ cdef class Autosave:
         
         
         if ret != OSSO_OK:
-            raise OssoException, "OSSO error: osso_application_set_autosave_cb"
+          _set_exception(ret, NULL)
 
     def userdata_changed(self):
         cdef osso_return_t ret
