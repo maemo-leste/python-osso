@@ -11,7 +11,7 @@ def pkgconfig(*packages, **kw):
     command = Popen(["pkg-config", "--libs", "--cflags"] + list(packages), stdout=PIPE)
     for token in command.communicate()[0].split():
         kw.setdefault(flag_map.get(token[:2]), []).append(token[2:])
-    kw["extra_compile_args"] = ["-Werror"]
+    kw["extra_compile_args"] = ["-Werror", "-Wno-unused-function"]
     return kw
 
 extensions = []

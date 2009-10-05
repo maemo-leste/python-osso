@@ -81,7 +81,7 @@ cdef extern from "libosso.h":
                                       void *data)
 
     ctypedef void osso_rpc_async_f(char *interface, char *method,
-                                   osso_rpc_t *retval, void *data) 
+                                   osso_rpc_t *retval, void *data)
     osso_return_t osso_rpc_async_run_with_argfill(osso_context_t *osso,
                                                   char *service,
                                                   char *object_path,
@@ -117,3 +117,18 @@ cdef extern from "libosso.h":
 
     osso_return_t osso_state_write(osso_context_t *osso, osso_state_t *state)
     osso_return_t osso_state_read(osso_context_t *osso, osso_state_t *state)
+
+    osso_return_t osso_statusbar_send_event(osso_context_t *osso,
+                                            char *name,
+                                            int argument1,
+                                            int argument2,
+                                            char *argument3,
+                                            osso_rpc_t *retval)
+
+    osso_return_t osso_time_set(osso_context_t *osso,
+                                int new_time)
+
+    ctypedef void osso_time_cb_f(void *data)
+    osso_return_t osso_time_set_notification_cb(osso_context_t *osso,
+                                                osso_time_cb_f *cb,
+                                                void *data)
