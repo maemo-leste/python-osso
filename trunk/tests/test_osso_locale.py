@@ -20,10 +20,10 @@ class TestOssoLocale(unittest.TestCase):
 
     def test_set_localet(self):
         locale = osso.Locale(self.ctx)
-        locale.change_set_notification_cb(self.locale_changed, self)
+        locale.set_locale_notification_callback(self.locale_changed, self)
 
         self.new_locale = ""
-        locale.set("en_GB")
+        locale.set_locale("en_GB")
 
         self.loop = gobject.MainLoop()
         gobject.idle_add(self.app_quit)

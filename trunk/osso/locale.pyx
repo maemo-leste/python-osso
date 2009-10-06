@@ -18,7 +18,7 @@ cdef class Locale:
     def __cinit__(self, Context context not None):
         self.ctx = context.ctx
 
-    def change_set_notification_cb(self, callback, user_data=None):
+    def set_locale_notification_callback(self, callback, user_data=None):
         cdef osso_return_t ret
 
         if callback:
@@ -31,7 +31,7 @@ cdef class Locale:
             if ret != OSSO_OK:
                 _set_exception(ret, NULL)
 
-    def set(self, new_locale):
+    def set_locale(self, new_locale):
         cdef osso_return_t ret
 
         ret = osso_locale_set(self.ctx, new_locale)

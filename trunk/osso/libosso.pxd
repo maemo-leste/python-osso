@@ -20,7 +20,7 @@ cdef extern from "libosso.h":
         void *state_data
 
     ctypedef void osso_application_autosave_cb_f(void *data)
-    
+
     ctypedef void osso_rpc_argfill(DBusMessage *msg, void *data)
 
     ctypedef enum osso_return_t:
@@ -145,3 +145,13 @@ cdef extern from "libosso.h":
                                                           osso_locale_change_cb_f *cb,
                                                           void *data)
     osso_return_t osso_locale_set (osso_context_t *osso, char *new_locale)
+
+    #Mime
+    ctypedef void osso_mime_cb_f(void *data, int argc, char **argv)
+    osso_return_t osso_mime_set_cb(osso_context_t *osso,
+                                   osso_mime_cb_f *cb,
+                                   void *data)
+    osso_return_t osso_mime_unset_cb(osso_context_t *osso)
+    osso_return_t osso_mime_unset_cb_full(osso_context_t *osso,
+                                          osso_mime_cb_f *cb,
+                                          void *data)

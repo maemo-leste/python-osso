@@ -15,7 +15,7 @@ class TestOssoTime(unittest.TestCase):
 
     def test_set_time(self):
         t = osso.Time(self.ctx)
-        t.set(int(time.time()))
+        t.set_time(int(time.time()))
 
     def notification_cb(self, user_data):
         user_data.called = True
@@ -26,8 +26,8 @@ class TestOssoTime(unittest.TestCase):
     def test_set_notification(self):
         t = osso.Time(self.ctx)
         self.called = False
-        t.set_notification_cb(self.notification_cb, self)
-        t.set(int(time.time()))
+        t.set_time_notification_callback(self.notification_cb, self)
+        t.set_time(int(time.time()))
 
         self.loop = gobject.MainLoop()
         gobject.idle_add(self.app_quit)

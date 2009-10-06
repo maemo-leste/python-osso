@@ -12,7 +12,7 @@ class TestOssoStatusBar(unittest.TestCase):
 
     def test_send_event(self):
         statusbar = osso.StatusBar(self.ctx)
-        #statusbar.send_event("display", 1, 1, "")
+        #statusbar.statusbar_send_event("display", 1, 1, "")
 
 if __name__ == "__main__":
     unittest.main()

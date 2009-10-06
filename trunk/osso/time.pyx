@@ -19,14 +19,14 @@ cdef class Time:
     def __cinit__(self, Context context not None):
         self.ctx = context.ctx
 
-    def set(self, int new_time):
+    def set_time(self, new_time):
         cdef osso_return_t ret
 
         ret = osso_time_set(self.ctx, new_time)
         if ret != OSSO_OK:
             _set_exception(ret, NULL)
 
-    def set_notification_cb(self, callback, user_data=None):
+    def set_time_notification_callback(self, callback, user_data=None):
         cdef osso_return_t ret
 
         if callback:
