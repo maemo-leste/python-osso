@@ -8,3 +8,5 @@ from statusbar import StatusBar
 from time import Time
 from locale import Locale
 from mime import Mime
+from system_note import SystemNote
+from device_state import DeviceState
