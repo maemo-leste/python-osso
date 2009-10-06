@@ -4,6 +4,24 @@ from libglib cimport GArray
 cdef extern from "libosso.h":
     ctypedef struct osso_context_t
 
+    ctypedef enum osso_display_state_t:
+        OSSO_DISPLAY_ON
+        OSSO_DISPLAY_OFF
+        OSSO_DISPLAY_DIMMED
+
+    ctypedef enum osso_devmode_t:
+        OSSO_DEVMODE_NORMAL
+        OSSO_DEVMODE_FLIGHT
+        OSSO_DEVMODE_OFFLINE
+        OSSO_DEVMODE_INVALID
+
+    ctypedef struct osso_hw_state_t:
+        bint shutdown_ind
+        bint save_unsaved_data_ind
+        bint memory_low_ind
+        bint system_inactivity_ind
+        osso_devmode_t sig_device_mode_ind
+
     cdef union value:
         unsigned int u
         int i
@@ -47,6 +65,24 @@ cdef extern from "libosso.h":
                                     void *context)
     void osso_deinitialize(osso_context_t *osso)
 
+    # Device State
+    ctypedef void osso_hw_cb_f(osso_hw_state_t *state,
+                               void *data)
+    ctypedef void osso_display_event_cb_f(osso_display_state_t state,
+                               void *data)
+    osso_return_t osso_display_state_on(osso_context_t *osso)
+    osso_return_t osso_display_blanking_pause(osso_context_t *osso)
+    osso_return_t osso_hw_set_event_cb(osso_context_t *osso,
+		                       osso_hw_state_t *state,
+                                       osso_hw_cb_f *cb,
+                                       void *data)
+    osso_return_t osso_hw_unset_event_cb(osso_context_t *osso,
+                                         osso_hw_state_t *state)
+    osso_return_t osso_hw_set_display_event_cb(osso_context_t *osso,
+                                               osso_display_event_cb_f *cb,
+                                               void *data)
+
+    # RPC
     osso_return_t osso_rpc_run_system_with_argfill(osso_context_t *osso,
                                                    char *service,
                                                    char *object_path,
@@ -91,10 +127,10 @@ cdef extern from "libosso.h":
                                                   void *data,
                                                   osso_rpc_argfill *argfill,
                                                   void *argfill_data)
-
     osso_return_t osso_rpc_get_timeout(osso_context_t *osso, int *timeout)
     osso_return_t osso_rpc_set_timeout(osso_context_t *osso, int timeout)
 
+    # System Notification
     osso_return_t osso_system_note_dialog(osso_context_t *osso,
                                           char *message,
                                           osso_system_note_type_t type,
