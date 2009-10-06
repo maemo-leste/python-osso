@@ -14,25 +14,24 @@ cdef void _wrap_autosave_callback_wrapper(void *data) with gil:
 cdef class Autosave:
     def __cinit__(self, Context context not None):
         self.ctx = context.ctx
-    
+
     def set_autosave_callback(self, cb, data=None):
         cdef osso_return_t ret
-        
+
         if cb != None:
             self.cb_data = (cb, data)
-            ret = osso_application_set_autosave_cb(self.ctx, _wrap_autosave_callback_wrapper, <void *> self)
+            ret = osso_application_set_autosave_cb(self.ctx, _wrap_autosave_callback_wrapper, <void *>self)
         else:
             self.cb_data = None
-            ret = osso_application_unset_autosave_cb(self.ctx, _wrap_autosave_callback_wrapper, <void *> self)
-        
-        
+            ret = osso_application_unset_autosave_cb(self.ctx, _wrap_autosave_callback_wrapper, <void *>self)
+
         if ret != OSSO_OK:
-          _set_exception(ret, NULL)
+            _set_exception(ret, NULL)
 
     def userdata_changed(self):
         cdef osso_return_t ret
         ret = osso_application_userdata_changed(self.ctx)
-    
+
     def force_autosave(self):
         cdef osso_return_t ret
         ret = osso_application_autosave_force(self.ctx)
@@ -42,6 +41,3 @@ cdef class Autosave:
 
     def get_version(self):
         return osso_application_version_get(self.ctx)
-
-
-

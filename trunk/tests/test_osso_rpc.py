@@ -25,9 +25,7 @@ if __name__ == "__main__":
 """ % locals()
 
 def test_async_cb(interface, method, retval, user_data):
-    # FIXME: this callback is never called even on older python-osso version
-    # Needs to lack at a C example
-    print "test_async_cb: interface = \"%s\", method = \"%s\", retval = %s, user_data = %s" % (interface, method, arguments, user_data)
+    print "test_async_cb: interface = \"%s\", method = \"%s\", retval = %s, user_data = %s" % (interface, method, retval, user_data)
 
 class TestOssoRpc(unittest.TestCase):
     def setUp(self):

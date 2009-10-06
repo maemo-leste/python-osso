@@ -15,7 +15,7 @@ cdef int _rpc_callback_handler(const_gchar *interface, const_gchar *method, GArr
     try:
         ret = rpc.cb_data[0](<char *>interface, <char *>method,
                             _rpc_args_c_to_py(arguments),
-                            <object>rpc.cb_data[1])
+                            rpc.cb_data[1])
     except:
         # print exception on receiver, and return DBUS message to sender
         print_exc()
@@ -27,13 +27,17 @@ cdef int _rpc_callback_handler(const_gchar *interface, const_gchar *method, GArr
 
 cdef void _wrap_rpc_async_handler(const_gchar *interface, const_gchar *method,
                                   osso_rpc_t *retval, void *data) with gil:
-    rpc = <Rpc>data
+    cb_data = <object>data
     try:
-        ret = rpc.cb_data[0](<char *>interface, <char *>method,
-                             _rpc_t_to_python(retval),
-                             <object>rpc.cb_data[1])
+        ret = cb_data[0](<char *>interface, <char *>method,
+                         _rpc_t_to_python(retval), cb_data[1])
     except:
         print_exc()
+
+# callback data for async RPC calls need to be global, otherwise it may get
+# garbage collected
+# FIXME: this is thread unsafe
+_async_cb_data = None
 
 cdef class Rpc:
     def __cinit__(self, Context context not None):
@@ -73,14 +77,15 @@ cdef class Rpc:
         cdef osso_return_t ret
         if not callable(callback):
             raise TypeError, "callback parameter must be callable"
-        self.cb_data = (callback, user_data)
+        global _async_cb_data
+        _async_cb_data = (callback, user_data)
         ret = osso_rpc_async_run_with_argfill(self.ctx,
                                               service,
                                               object_path,
                                               interface,
                                               method,
                                               _wrap_rpc_async_handler,
-                                              <void *>self,
+                                              <void *>_async_cb_data,
                                               _argfill,
                                               <void *>rpc_args)
         if ret != OSSO_OK:
@@ -121,6 +126,6 @@ cdef class Rpc:
         cdef int timeout
         ret = osso_rpc_get_timeout(self.ctx, &timeout)
         if ret != OSSO_OK:
-             _set_exception(ret, NULL)
+            _set_exception(ret, NULL)
         else:
             return timeout

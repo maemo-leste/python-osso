@@ -133,5 +133,5 @@ cdef extern from "libosso.h":
                                                 osso_time_cb_f *cb,
                                                 void *data)
 
-osso_return_t osso_cp_plugin_execute (osso_context_t *osso, char *filename, void *data, int user_activated)
-osso_return_t osso_cp_plugin_save_state (osso_context_t *osso, char *filename, void* data)
+    osso_return_t osso_cp_plugin_execute(osso_context_t *osso, char *filename, void *data, int user_activated)
+    osso_return_t osso_cp_plugin_save_state(osso_context_t *osso, char *filename, void *data)

@@ -3,7 +3,6 @@ from libosso cimport osso_return_t, OSSO_OK, osso_cp_plugin_execute, osso_cp_plu
 from context cimport Context
 from python_object cimport PyObject_HasAttrString
 
-
 cdef class Plugin:
     def __cinit__(self, Context context not None):
         self.ctx = context.ctx
@@ -11,7 +10,7 @@ cdef class Plugin:
     def plugin_execute(self, filename, user_activated, user_data=None):
         cdef void *data
         cdef osso_return_t ret
-        
+
         data = NULL
         ret = OSSO_OK
 
@@ -31,8 +30,3 @@ cdef class Plugin:
         ret = osso_cp_plugin_save_state(self.ctx, filename, <void *>user_data)
         if ret != OSSO_OK:
             _set_exception(ret, NULL)
-
-
-
-
-
