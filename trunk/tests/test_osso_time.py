@@ -19,6 +19,7 @@ class TestOssoTime(unittest.TestCase):
 
     def notification_cb(self, user_data):
         user_data.called = True
+        self.loop.quit()
 
     def app_quit(self):
         self.loop.quit()
@@ -30,8 +31,9 @@ class TestOssoTime(unittest.TestCase):
         t.set_time(int(time.time()))
 
         self.loop = gobject.MainLoop()
-        gobject.idle_add(self.app_quit)
+        cb_id = gobject.timeout_add(1000, self.app_quit)
         self.loop.run()
+        gobject.source_remove(cb_id)
         self.assertEqual(self.called, True)
 
 if __name__ == "__main__":

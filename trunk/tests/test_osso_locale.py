@@ -14,6 +14,7 @@ class TestOssoLocale(unittest.TestCase):
 
     def locale_changed(self, new_locale, user_data):
         user_data.new_locale = new_locale
+        self.loop.quit()
 
     def app_quit(self):
         self.loop.quit()
@@ -26,8 +27,9 @@ class TestOssoLocale(unittest.TestCase):
         locale.set_locale("en_GB")
 
         self.loop = gobject.MainLoop()
-        gobject.idle_add(self.app_quit)
+        cb_id = gobject.timeout_add(1000, self.app_quit)
         self.loop.run()
+        gobject.source_remove(cb_id)
 
         self.assertEqual(self.new_locale, "en_GB")
 
