@@ -4,7 +4,7 @@ import time
 
 import gobject
 
-class TestOssoStateSavingAutosave(unittest.TestCase):
+class TestOssoTime(unittest.TestCase):
     def setUp(self):
         self.ctx = osso.Context("app", "0.1")
 

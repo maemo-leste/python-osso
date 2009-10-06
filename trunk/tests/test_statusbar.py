@@ -1,7 +1,7 @@
 import unittest
 import osso
 
-class TestOssoStateSavingAutosave(unittest.TestCase):
+class TestOssoStatusBar(unittest.TestCase):
     def setUp(self):
         self.ctx = osso.Context("app", "0.1")
 

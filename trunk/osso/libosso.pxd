@@ -133,5 +133,15 @@ cdef extern from "libosso.h":
                                                 osso_time_cb_f *cb,
                                                 void *data)
 
-    osso_return_t osso_cp_plugin_execute(osso_context_t *osso, char *filename, void *data, int user_activated)
-    osso_return_t osso_cp_plugin_save_state(osso_context_t *osso, char *filename, void *data)
+    osso_return_t osso_cp_plugin_execute (osso_context_t *osso, char *filename, void *data, int user_activated)
+    osso_return_t osso_cp_plugin_save_state (osso_context_t *osso, char *filename, void* data)
+
+    #Locale
+    cdef extern from *:
+        ctypedef char* const_char_ptr "const char*"
+
+    ctypedef void osso_locale_change_cb_f(const_char_ptr new_locale, void *data)
+    osso_return_t osso_locale_change_set_notification_cb (osso_context_t *osso,
+                                                          osso_locale_change_cb_f *cb,
+                                                          void *data)
+    osso_return_t osso_locale_set (osso_context_t *osso, char *new_locale)
