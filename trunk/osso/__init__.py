@@ -5,7 +5,7 @@ from state_saving import StateSaving
 from autosave import Autosave
 from plugin import Plugin
 from statusbar import StatusBar
-from time import Time
+from time_notification import TimeNotification
 from locale import Locale
 from mime import Mime
 from system_note import SystemNote

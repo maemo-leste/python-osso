@@ -5,7 +5,7 @@ class TestOssoMime(unittest.TestCase):
     def setUp(self):
         self.ctx = osso.Context("test_osso", "0.1")
 
-    def test_constructor_status_bar(self):
+    def test_constructor(self):
         mime = osso.Mime(self.ctx)
         self.assertTrue(isinstance(mime, osso.Mime))
         self.assertRaises(TypeError, osso.Mime, None)
@@ -16,7 +16,7 @@ class TestOssoMime(unittest.TestCase):
     def app_quit(self):
         self.loop.quit()
 
-    def test_set_localet(self):
+    def test_set_mime_callback(self):
         mime = osso.Mime(self.ctx)
 
         mime.set_mime_callback(self.mime_cb, self)
