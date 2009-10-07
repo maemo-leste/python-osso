@@ -3,7 +3,7 @@ import osso
 
 class TestOssoStateSavingAutosave(unittest.TestCase):
     def setUp(self):
-        self.ctx = osso.Context("app", "0.1")
+        self.ctx = osso.Context("test_osso", "0.1")
         self.number = 3.1415
     
     def test_constructor_state_saving(self):

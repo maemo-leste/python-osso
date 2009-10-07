@@ -115,6 +115,12 @@ cdef extern from "libosso.h":
                                       char *interface,
                                       osso_rpc_cb_f *cb,
                                       void *data)
+    osso_return_t osso_rpc_set_default_cb_f(osso_context_t *osso,
+                                            osso_rpc_cb_f *cb,
+                                            void *data)
+    osso_return_t osso_rpc_unset_default_cb_f(osso_context_t *osso,
+                                              osso_rpc_cb_f *cb,
+                                              void *data)
 
     ctypedef void osso_rpc_async_f(char *interface, char *method,
                                    osso_rpc_t *retval, void *data)

@@ -3,7 +3,7 @@ import osso
 
 class TestOssoMime(unittest.TestCase):
     def setUp(self):
-        self.ctx = osso.Context("app", "0.1")
+        self.ctx = osso.Context("test_osso", "0.1")
 
     def test_constructor_status_bar(self):
         mime = osso.Mime(self.ctx)

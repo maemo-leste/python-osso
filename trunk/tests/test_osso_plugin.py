@@ -25,7 +25,7 @@ osso_return_t save_state(osso_context_t *osso, gpointer data)
 """
 
 # only a single context must be created
-context = osso.Context("app", "0.1", False)
+context = osso.Context("test_osso", "0.1", False)
 
 class TestOssoPlugin(unittest.TestCase):
     def setUp(self):
