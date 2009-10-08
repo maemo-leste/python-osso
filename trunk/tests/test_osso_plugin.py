@@ -47,8 +47,10 @@ class TestOssoPlugin(unittest.TestCase):
         self.assertRaises(TypeError, osso.Plugin, None)
 
     def test_plugin_execute(self):
+        import gtk
         plugin = osso.Plugin(self.ctx)
         plugin.plugin_execute("libunittestplugin.so", True)
+        plugin.plugin_execute("libunittestplugin.so", True, gtk.Window())
 
     def test_plugin_save_state(self):
         plugin = osso.Plugin(self.ctx)

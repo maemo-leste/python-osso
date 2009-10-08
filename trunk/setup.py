@@ -19,7 +19,7 @@ for pyx in glob.glob("osso/*.pyx"):
     if pyx == "osso/helper.pyx":
         continue
     ext_name = pyx[:-4].replace('/', '.')
-    extensions.append(Extension(ext_name, [pyx], **pkgconfig("libosso")))
+    extensions.append(Extension(ext_name, [pyx], **pkgconfig("libosso", "pygobject-2.0")))
 
 setup(name = "osso",
       version = "0.4",
