@@ -3,15 +3,39 @@ include "helper.pyx"
 from libosso cimport osso_return_t, osso_context_t, osso_hw_state_t, osso_hw_cb_f, osso_display_event_cb_f, OSSO_OK, osso_display_state_on, osso_display_blanking_pause, osso_hw_set_event_cb, osso_hw_unset_event_cb, osso_hw_set_display_event_cb, osso_display_state_t, OSSO_DEVMODE_NORMAL, OSSO_DEVMODE_FLIGHT, OSSO_DEVMODE_OFFLINE, OSSO_DEVMODE_INVALID
 from context cimport Context
 from exceptions import OssoException
+from traceback import print_exc
 cimport libosso
 
-cdef void _hw_callback_handler(osso_hw_state_t *state, void *data) with gil:
+cdef void _hw_callback_handler(osso_hw_state_t *hw_state, void *data) with gil:
     device_state = <DeviceState>data
-    device_state.cb_data[0](device_state.cb_data[1])
+    if hw_state == NULL:
+        return
+    if hw_state.sig_device_mode_ind == OSSO_DEVMODE_NORMAL:
+        hw_state_str = "normal"
+    elif hw_state.sig_device_mode_ind == OSSO_DEVMODE_FLIGHT:
+        hw_state_str = "flight"
+    elif hw_state.sig_device_mode_ind == OSSO_DEVMODE_OFFLINE:
+        hw_state_str = "offline"
+    elif hw_state.sig_device_mode_ind == OSSO_DEVMODE_INVALID:
+        hw_state_str = "invalid"
+    else:
+        hw_state_str = ""
+    try:
+        device_state.cb_data[0](hw_state.shutdown_ind,
+                                hw_state.save_unsaved_data_ind,
+                                hw_state.memory_low_ind,
+                                hw_state.system_inactivity_ind,
+                                hw_state_str,
+                                device_state.cb_data[1])
+    except:
+        print_exc()
 
 cdef void _display_callback_handler(osso_display_state_t state, void *data) with gil:
     device_state = <DeviceState>data
-    device_state.display_cb_data[0](<int>state, device_state.display_cb_data[1])
+    try:
+        device_state.display_cb_data[0](<int>state, device_state.display_cb_data[1])
+    except:
+        print_exc()
 
 cdef class DeviceState:
     def __cinit__(self, Context context not None):
