@@ -2,7 +2,7 @@ Source: python-osso
 Priority: optional
 Section: python
 Maintainer: PyMaemo Team <pymaemo-developers@garage.maemo.org>
-Build-Depends: debhelper (>= 4.0.0), cdbs, cython, python-dev, python-central
+Build-Depends: debhelper (>= 4.0.0), cdbs, cython, python-dev, python-central, libosso-dev, python-gobject-dev
 XS-Python-Version: all
 Standards-Version: 3.6.1
 

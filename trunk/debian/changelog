@@ -1,6 +1,8 @@
 python-osso (0.4-0maemo1) unstable; urgency=low
 
-  * Rewrite using Cython.
+  * Rewrite using Cython:
+    + Add a few more missing functions
+    + Add unit tests for almost all implemented API
 
  -- Anderson Lizardo <anderson.lizardo@indt.org.br>  Fri, 25 Sep 2009 21:03:08 -0400
 
