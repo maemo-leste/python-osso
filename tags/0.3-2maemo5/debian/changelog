@@ -1,0 +1,122 @@
+python-osso (0.3-2maemo5) unstable; urgency=low
+
+  * debian/control:
+    - Add Provides/Replaces keyword for python2.5-osso (Fixes: #4977)
+
+ -- Bruno dos Santos de Araujo <bruno.araujo@indt.org.br>  Fri, 11 Sep 2009 08:38:20 -0400
+
+python-osso (0.3-2maemo4) unstable; urgency=low
+
+  * Remove hardcoded 'site-packages' paths allowing install without
+    problems in either python2.5 ou python2.6
+  * Use "pyversions -vd" instead of a fixed Python version in debian/rules
+  * Fix osso.Context() segfault (Fixes: MB#4782)
+
+ -- Bruno dos Santos de Araujo <bruno.araujo@indt.org.br>  Tue,  9 Jun 2009 15:49:08 -0400
+
+python-osso (0.3-2maemo3) unstable; urgency=low
+
+  * Put the pymaemo-developers mailing list address in "Maintainer" field.
+
+ -- Anderson Lizardo <anderson.lizardo@indt.org.br>  Wed, 01 Apr 2009 12:00:42 -0400
+
+python-osso (0.3-2maemo2) unstable; urgency=low
+
+  * Change ${Source-Version} to ${source:Version}, because the former is deprecated
+  * Change version of python-osso-dev dependency from (= ${source:Version})
+    to (>= ${source:Version})
+
+ -- Bruno dos Santos de Araujo <bruno.araujo@indt.org.br>  Thu, 27 Nov 2008 08:22:27 -0400
+
+python-osso (0.3-2maemo1) unstable; urgency=low
+
+  * Build-Depends changes:
+    - python2.5-gtk2-dev -> python-gtk2-dev 
+    - python2.5-dev -> python-all-dev
+  * Package python2.5-osso is now python-osso
+  * python-osso Depends changes:
+    - python2.5-gtk2 -> python-gtk2
+    - python2.5 -> python-all
+  * Package python2.5-osso-dev is now python-osso-dev
+  * python-osso-dev Depends changes:
+    - python2.5-osso -> python-osso
+  * Modify p_base and p_dev in debian/rules to python-osso and
+    python-osso-dev, respectively.
+
+ -- Bruno dos Santos de Araujo <bruno.araujo@indt.org.br>  Wed, 19 Nov 2008 13:58:39 -0400
+
+python-osso (0.3-1osso4) unstable; urgency=low
+
+  * Adding alarmd.py from Gene Cash
+  * Fix in AutoSave (None as default argument)
+  * Fix parameter order in DeviceState.set_device_state_cb
+  * Fix default parameter in DeviceState.set_device_state_cb
+  * Added examples from bora to -dev package 
+
+ -- Lauro Moura Maranhao Neto <lauro.neto@openbossa.org>  Fri, 28 Dec 2007 17:50:29 -0300
+
+python-osso (0.3-1osso3) unstable; urgency=low
+
+  * Fixed __init__.py - Do not import help module.
+
+ -- Lauro Moura Neto <lauro.neto@openbossa.org>  Fri, 26 Oct 2007 14:45:41 -0300
+
+python-osso (0.3-1osso2) unstable; urgency=low
+
+  * mime and ic modules removed 
+
+ -- Luciano Miguel Wolf <luciano.wolf@indt.org.br>  Thu,  2 Aug 2007 10:33:13 -0300
+
+python-osso (0.3-1osso1) unstable; urgency=low
+
+  * support to cairo
+
+ -- Luciano Miguel Wolf <luciano.wolf@indt.org.br>  Wed, 30 May 2007 15:40:24 -0300
+
+python-osso (0.2-1osso3) unstable; urgency=low
+
+  * Added support to osso-mime 
+
+ -- Luciano Miguel Wolf <luciano.wolf@indt.org.br>  Wed,  9 May 2007 09:24:34 -0300
+
+python-osso (0.2-1osso2) unstable; urgency=low
+
+  * Osso rpc functions revised (closes #388, #389):
+    - rpc_run and rpc_async_run now can send correctly rpc arguments
+    - callback function of rpc_async_run now has an extra param: retval
+      eg: def callbackfunc (interface, method, retval, userdata):
+
+ -- Luciano Miguel Wolf <luciano.wolf@indt.org.br>  Fri, 16 Jan 2007 14:50:00 -0300
+
+python-osso (0.2-1osso1) unstable; urgency=low
+
+  * Osso split in small modules
+
+ -- Luciano Miguel Wolf <luciano.wolf@indt.org.br>  Fri, 1 Dec 2006 17:54:00 -0300
+
+python-osso (0.1-1osso4) unstable; urgency=low
+
+  * added shlib dependencies
+  * enable "-mthumb" and "-msoft-abi=softfp" flags on gcc
+
+ -- Osvaldo Santana Neto <osvaldo.santana@indt.org.br>  Tue, 6 Jun 2006 19:36:00 -0300
+
+python-osso (0.1-1osso3) unstable; urgency=low
+
+  * renamed documentation directory in development package
+
+ -- Osvaldo Santana Neto <osvaldo.santana@indt.org.br>  Wed, 10 May 2006 17:49:00 -0300
+
+python-osso (0.1-1osso2) unstable; urgency=low
+
+  * Some packages adjustments
+  * Recompile with 2.0rc7
+
+ -- Osvaldo Santana Neto <osvaldo.santana@indt.org.br>  Thu, 5 May 2006 17:20:00 -0300
+
+python-osso (0.1-1osso1) unstable; urgency=low
+
+  * First python-osso release.
+
+ -- Osvaldo Santana Neto <osvaldo.santana@indt.org.br>  Thu, 27 Apr 2006 17:45:00 -0300
+
