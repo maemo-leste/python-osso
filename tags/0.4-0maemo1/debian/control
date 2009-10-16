@@ -1,0 +1,15 @@
+Source: python-osso
+Priority: optional
+Section: python
+Maintainer: PyMaemo Team <pymaemo-developers@garage.maemo.org>
+Build-Depends: debhelper (>= 4.0.0), cdbs, cython, python-dev, python-central, libosso-dev, python-gobject-dev
+XS-Python-Version: all
+Standards-Version: 3.6.1
+
+Package: python-osso
+Architecture: any
+Provides: python2.5-osso
+Replaces: python2.5-osso
+Depends: ${shlibs:Depends}
+XB-Python-Version: all
+Description: Python bindings for libosso library
