@@ -1,3 +1,9 @@
+python-osso (0.4-0maemo2) unstable; urgency=low
+
+  * debian/control: Add missing ${python:Depends}
+
+ -- Anderson Lizardo <anderson.lizardo@openbossa.org>  Sat, 14 Nov 2009 13:47:45 -0400
+
 python-osso (0.4-0maemo1) unstable; urgency=low
 
   * Rewrite using Cython:
