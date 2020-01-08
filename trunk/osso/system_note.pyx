@@ -13,11 +13,11 @@ cdef class SystemNote:
         cdef osso_system_note_type_t type = OSSO_GN_NOTICE 
 
         if type_string:
-            if type_string == "warning":
+            if type_string == b"warning":
                 type = OSSO_GN_WARNING
-            elif type_string == "error":
+            elif type_string == b"error":
                 type = OSSO_GN_ERROR
-            elif type_string == "wait":
+            elif type_string == b"wait":
                 type = OSSO_GN_WAIT
 
         ret = osso_system_note_dialog(self.ctx, message, type, &retval)
