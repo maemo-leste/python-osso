@@ -1,9 +1,0 @@
-[Desktop Entry]
-Encoding=UTF-8
-Version=1.0
-Name=Control Panel Test
-Comment=A control panel example plugin
-Type=HildonControlPanelPlugin
-Icon=qgn_list_cp_isetup
-X-control-panel-plugin=libtestplugin.so
-Categories=general
